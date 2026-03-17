@@ -1,0 +1,1488 @@
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+Guide
+K.Pratap Joshi
+Team Members: 
+P.Bharath-23071A05J6
+T.Spoorthi-23071A05K2
+V.Hasnika-23071A05K9
+Y.Devendra-23071A05M2
+SMART GRIEVANCE MANAGEMENT PORTAL 
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+AGENDA
+
+Introduction
+Existing System & Limitations
+Proposed System
+Problem Statement
+Objectives
+Methodology(Architecture, Modules)
+Functional Requirements
+Work Plan & Distribution of Work
+References
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+INTRODUCTION
+With the growth of digital governance, citizens expect efficient and transparent platforms to submit and track public grievances. However, existing grievance redressal systems are often manual, slow, and lack real-time communication, anonymity, and accountability. This project presents an Smart Grievance Redressal System that enables secure complaint submission, real-time tracking, and anonymous interaction between citizens and authorities. By integrating AI-powered chatbots, NLP-based analysis, location services, emergency SOS, and identity protection features, the system enhances transparency, responsiveness, and citizen trust in governance.
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+LITERATURE REVIEW
+S.No
+Reference with DOI
+Problem or gap addressed
+Objective of the
+Research
+Focus of the paper (Discuss methods used)
+Inference
+Recommendations
+for future research
+How can your research help bridge the gap?
+
+
+
+
+
+
+
+
+
+
+
+1
+
+
+
+
+Title: Adaptive governance: Towards a stable, accountable and responsive government
+Journal: Computers in Human Behavior, Elsevier
+Link : https://www.sciencedirect.com/science/article/pii/S0747563216300711
+
+
+
+
+Traditional government feedback and grievance systems are rigid and slow.
+Lack of adaptability to citizen feedback and changing public needs.
+Limited transparency and accountability in digital governance platforms.
+Existing e-governance systems do not effectively incorporate real-time citizen input.
+
+
+
+To study how adaptive governance models improve government responsiveness.
+
+To analyze the role of digital platforms in citizen participation.
+
+To understand how technology can enhance transparency and accountability.
+
+To evaluate governance systems from a citizen-centric perspective.
+
+
+Conceptual and analytical study of adaptive governance models.
+Examination of digital government platforms and citizen interaction.
+Case-based analysis of technology-enabled governance systems.
+
+
+Digital feedback systems significantly improve citizen–government interaction.
+
+Adaptive governance enables faster response to grievances and public feedback.
+
+Transparency and accountability are enhanced when citizens actively participate.
+
+
+Implement real-time grievance tracking mechanisms.
+
+Integrate AI-based analysis for citizen feedback and complaints.
+
+Study large-scale deployment of adaptive governance platforms.
+
+Provides a practical online grievance redressal system instead of only conceptual models.
+
+Implements real-time complaint tracking and analytics.
+
+Supports anonymous communication and identity protection.
+
+
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+S.No
+Reference with DOI
+Problem or gap addressed
+Objective of the Research
+Focus of the paper (Discuss methods used)
+Inference
+Recommendations for future research
+How can your research help bridge the gap?
+
+
+
+
+
+
+
+
+
+
+
+2
+
+
+
+
+
+
+
+The impact of consumer complaints on corporate digital transformation Link : https://www.sciencedirect.com/science/article/pii/S1059056025003661
+
+
+
+
+
+Consumer complaints impact organizational strategies.
+
+Lack of research on how complaints affect long-term digital transformation.
+
+Prior literature focuses on service quality but not on digital investment decisions.
+
+Firms may divert resources from innovation to manage complaint backlash.
+
+
+
+
+To quantify how consumer complaints influence corporate digital transformation.
+
+To identify mechanisms through which complaints alter governance and investment.
+
+To analyze heterogeneity across firm characteristics (e.g., cybersecurity governance).
+
+
+Empirical analysis using quarterly data (2018–2023) from Chinese listed firms.
+
+Regression models estimating influence of consumer complaints on transformation.
+
+Mechanism analysis to evaluate legal risk and cost pathways.
+
+
+
+Increase in consumer complaints significantly hinders corporate digital transformation.
+
+Complaints raise legal risk and non-productive costs, diverting resources.
+
+Firms with weak cybersecurity governance face stronger inhibitory effects.
+
+
+Investigate sector-specific differences in complaint impact.
+
+Study the role of automated grievance systems in mitigating negative effects.
+
+Explore how digital complaint platforms could enhance responsiveness and innovation.
+
+
+Our project focuses on online grievance resolution rather than complaint impact on firms.
+
+Incorporates real-time tracking and AI analysis, which may reduce complaint volume and strengthen consumer engagement.
+
+
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+S.No
+Reference with DOI
+Problem or gap addressed
+Objective of the Research
+Focus of the paper (Discuss methods used)
+Inference
+Recommendations for future research
+How can your research help bridge the gap?
+
+
+
+
+
+
+
+
+
+
+
+
+3
+
+
+
+
+
+
+
+Case Complexity and Citizen Satisfaction with Local Public Services.
+Link : https://www.sciencedirect.com/science/article/abs/pii/S0305750X12001490
+
+
+
+
+
+Complex public service cases lead to low citizen satisfaction.
+
+Traditional grievance systems do not categorize case complexity.
+
+Citizens experience delayed or inconsistent service resolution.
+
+Lack of understanding of how case complexity affects trust in governance.
+
+
+
+To examine the effect of case complexity on citizen satisfaction with public services.
+
+To understand how complexity impacts perceptions of service quality and responsiveness.
+
+To investigate how public institutions manage frustration and expectations.
+
+
+
+Empirical study using survey data from multiple municipalities.
+
+Statistical analysis to correlate case complexity with satisfaction levels.
+
+Comparison across diverse service types and demographic groups.
+
+
+
+Higher case complexity is linked to lower citizen satisfaction.
+
+Simple cases are resolved faster and more consistently.
+
+Public trust decreases when services fail to manage difficult cases.
+
+Complexity negatively affects perceptions of transparency and fairness.
+
+Develop systems to categorize complaints by complexity automatically.
+
+Explore digital workflows that streamline complex case resolution.
+
+Study the role of feedback loops and transparency in satisfaction outcomes.
+
+Our system provides structured digital classification of complaints, reducing ambiguity.
+
+Includes AI/NLP analysis to help authorities understand case complexity early.
+
+Helps institutions manage and resolve complex cases more efficiently.
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+S.No
+Reference with DOI
+Problem or gap addressed
+Objective of the Research
+Focus of the paper (Discuss methods used)
+Inference
+Recommendations for future research
+How can your research help bridge the gap?
+
+
+
+
+
+
+
+
+
+
+
+
+4
+
+
+
+
+
+
+How can citizen complaints improve public services? Evidence from a big data approach. Link : https://www.sciencedirect.com/science/article/pii/S0306457323003485
+
+
+
+
+Limited understanding of how citizen complaints lead to improvements in public services.
+
+Traditional complaint systems are fragmented and lack analytical insights.
+
+There is insufficient evidence showing the practical impact of complaint feedback on public service quality.
+
+Public service agencies often fail to use complaint data effectively for policy changes.
+
+
+To analyze the relationship between citizen complaints and improvements in public service delivery.
+
+To use big data methods to evaluate public responsiveness to grievances.
+
+To identify patterns in public complaints that predict service improvements.
+
+
+
+Utilized large-scale complaint datasets from public service agencies.
+
+Applied big data analytics to discover patterns in complaint effects.
+
+Correlation and regression analyses were used to evaluate complaint impact on service performance.
+Citizen complaints significantly predict improvements in service efficiency.
+
+Data-driven analysis reveals specific complaint types that trigger rapid institutional responses.
+
+Public agencies that monitor complaint trends perform better in service outcomes.
+
+
+Develop automated analytical frameworks for complaint categorization and insights.
+
+Integrate complaint analytics with dashboard visualizations for authorities.
+
+Explore how real-time feedback systems impact service responsiveness.
+
+Combines NLP and analytics dashboards to extract meaningful insights from grievances.
+
+Enhances public service quality by enabling authorities to respond faster using AI assistance.
+
+
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+S.No
+Reference with DOI
+Problem or gap addressed
+Objective of the Research
+Focus of the paper (Discuss methods used)
+Inference
+Recommendations for future research
+How can your research help bridge the gap?
+
+
+
+
+
+
+
+
+
+
+
+
+5
+
+
+
+
+
+
+
+
+Re‐evaluating the Publicness of Public Services: A Theoretical and Empirical Analysis
+Link : https://www.sciencedirect.com/science/article/pii/S0160791X22001191
+
+
+
+
+
+
+Increasing digital transformation in public services raises questions about how public services are perceived.
+
+Traditional frameworks lack empirical support on the publicness of services in digital environments.
+
+Existing literature focuses on private sector service efficiency rather than public service delivery dynamics.
+
+
+To define and measure the concept of publicness in modern public services.
+
+To analyse how digital public service platforms influence service value and inclusiveness.
+
+To evaluate the theoretical frameworks around public service performance.
+Mixed-method study combining theoretical review and empirical analysis.
+
+Survey data collected from diverse public service users.
+
+Statistical techniques applied to assess perceptions of service inclusiveness, trust, and public value.
+
+
+Digital public services can enhance perceived publicness if they are transparent and inclusive.
+
+Citizen trust increases when services are accessible and responsive.
+
+User perceptions are strongly linked to the quality of service interaction, not just delivery speed.
+
+Examine specific digital tools that strengthen transparency in public services (e.g., dashboards).
+
+Research how user feedback systems influence public trust.
+
+Study context-specific public service use cases (e.g., grievance systems).
+
+
+
+
+Our system directly addresses public trust and transparency by offering real-time status tracking and analytics dashboards.
+
+Implements features (e.g., anonymous communication, AI chatbot) that enhance inclusiveness and accessibility.
+
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+S.No
+Reference with DOI
+Problem or gap addressed
+Objective of the Research
+Focus of the paper (Discuss methods used)
+Inference
+Recommendations for future research
+How can your research help bridge the gap?
+
+
+
+
+
+
+
+
+
+
+
+
+6
+
+
+
+
+
+
+Re‐evaluating the Publicness of Public Services: A Theoretical and Empirical Analysis
+Link : https://www.sciencedirect.com/science/article/pii/S0160791X22001191
+
+
+
+
+ Increasing digital transformation in public services raises questions about how public services are perceived.
+
+Traditional frameworks lack empirical support on the publicness of services in digital environments.
+
+Existing literature focuses on private sector service efficiency rather than public service delivery dynamics.
+
+
+To define and measure the concept of publicness in modern public services.
+
+To analyse how digital public service platforms influence service value and inclusiveness.
+
+To evaluate the theoretical frameworks around public service performance.
+Mixed-method study combining theoretical review and empirical analysis.
+
+Survey data collected from diverse public service users.
+
+Statistical techniques applied to assess perceptions of service inclusiveness, trust, and public value.
+
+
+Digital public services can enhance perceived publicness if they are transparent and inclusive.
+
+Citizen trust increases when services are accessible and responsive.
+
+User perceptions are strongly linked to the quality of service interaction, not just delivery speed.
+
+Examine specific digital tools that strengthen transparency in public services (e.g., dashboards).
+
+Research how user feedback systems influence public trust.
+
+Study context-specific public service use cases (e.g., grievance systems).
+
+Your system directly addresses public trust and transparency by offering real-time status tracking and analytics dashboards.
+
+Implements features (e.g., anonymous communication, AI chatbot) that enhance inclusiveness and accessibility.
+
+
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+S.No
+Reference with DOI
+Problem or gap addressed
+Objective of the
+Research
+Focus of the paper (Discuss methods used)
+Inference
+Recommendations
+for future research
+How can your research help bridge the gap?
+
+
+
+
+
+
+
+
+
+
+
+
+7
+
+
+
+
+
+
+
+Evaluating citizen adoption of e-government services: An integrative model
+Link : https://www.sciencedirect.com/science/article/abs/pii/S0740624X15000210
+
+
+
+
+Low citizen adoption of e-government platforms persists despite technological availability.
+
+Limited understanding of factors driving citizen engagement with digital services.
+
+Previous models focus on technology acceptance rather than public service context.
+
+To develop and validate an integrative adoption model for e-government services.
+
+To identify key determinants influencing citizen adoption behaviour.
+
+To examine how perceived usefulness, ease of use, trust, and service quality interact.
+Quantitative survey of citizens assessing e-government service perception.
+
+Structural Equation Modeling (SEM) to test relationships between variables.
+
+Integrated constructs from TAM (Technology Acceptance Model) and public service research.
+
+
+Trust and perceived usefulness are critical factors in e-government adoption.
+
+Ease of use and service quality positively impact user engagement.
+
+Citizen beliefs about reliability and responsiveness influence platform use.
+
+Integrated models explain adoption better than single-factor models.
+
+
+Assess the impact of real-time feedback systems on adoption rates.
+
+Investigate the role of mobile platforms and accessibility factors.
+
+Examine cultural and demographic variations in digital service use.
+
+Our system tackles adoption barriers by providing user-friendly dashboards, real-time updates, and AI assistance.
+
+Enhances trust through transparent tracking and anonymous communication features.
+
+Improves perceived usefulness by integrating analytics and location services.
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+S.No
+Reference with DOI
+Problem or gap addressed
+Objective of the
+Research
+Focus of the paper (Discuss methods used)
+Inference
+Recommendations
+for future research
+How can your research help bridge the gap?
+
+
+
+
+
+
+
+
+
+
+
+8
+
+
+
+
+
+
+An Integrated Complaint Management System Based on Large Language Models: Design, Challenges, and Opportunities
+ Link :
+https://www.sciencedirect.com/science/article/pii/S2590005625001973
+
+
+
+
+
+Traditional complaint systems are manual, slow, and lack intelligent automation.
+
+Difficulty in automatically categorizing and routing complaints.
+
+Existing systems struggle with contextual understanding of user grievances.
+
+
+To design an integrated complaint management system using large language models (LLMs).
+
+To explore how LLMs can improve complaint understanding, classification, and resolution.
+
+To address limitations in current automated analysis approaches.
+Conceptual system architecture using large language models for complaint processing.
+Discussion of NLP techniques for semantic understanding of complaint text.
+Analysis of routing algorithms for directing complaints to appropriate authorities..
+LLM-based systems can significantly enhance automated complaint classification.
+
+Semantic understanding leads to better categorization and quicker responses.
+
+Challenges remain in model bias, data privacy, and real-time performance.
+Develop real-time NLP pipelines for large volumes of complaint data.
+
+Study adaptive learning models that improve performance over time.
+
+Explore hybrid human–AI workflows to balance automation and oversight.
+
+Our system implements practical AI and NLP features such as chatbot assistance and complaint categorization.
+
+Incorporates analytics and real-time tracking, advancing beyond conceptual frameworks.
+
+
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+S.No
+Reference with DOI
+Problem or gap addressed
+Objective of the
+Research
+Focus of the paper (Discuss methods used)
+Inference
+Recommendations
+for future research
+How can your research help bridge the gap?
+
+
+
+
+
+
+
+
+
+
+
+9
+
+
+
+
+
+
+
+CitySolution: A Complaint Task Distributive Mobile Application for Urban Management
+Link : https://www.sciencedirect.com/science/article/pii/S2352711024002000
+
+
+
+Urban management systems lack an integrated platform for citizens to submit complaints and track resolutions.
+
+
+Traditional systems are fragmented and do not properly distribute tasks to the correct municipal departments.
+
+
+Limited mobile accessibility reduces citizen engagement and responsiveness.
+
+
+To design and develop CitySolution, a mobile application that enables complaint submission, categorization, and task distribution.
+
+
+To improve urban service management and responsiveness.
+
+
+To analyze how mobile access impacts citizen engagement and complaint resolution efficiency..
+Designed a mobile complaint management application for urban civic issues.
+
+Implemented a task distributive logic to route complaints to responsible urban offices.
+
+Conducted prototype testing with sample user groups.
+
+Mobile accessibility significantly increases citizen participation in reporting urban issues.
+
+The task distributive system improves resolution efficiency by directing complaints to relevant departments.
+
+Users reported higher satisfaction due to quick feedback and status updates.
+
+Integrate AI and NLP classification for automatic categorization of complaints.
+
+Expand the system to provide real-time analytics dashboards for authorities.
+
+Explore cross-department integration and multi-city scalability.
+
+
+
+Our project also focuses on real-time feedback and tracking, but goes further with AI-powered analytics and chat functionality.
+
+Implements anonymous communication to protect user privacy.
+
+
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+S.No
+Reference with DOI
+Problem or gap addressed
+Objective of the
+Research
+Focus of the paper (Discuss methods used)
+Inference
+Recommendations
+for future research
+How can your research help bridge the gap?
+
+
+
+
+
+
+
+
+
+
+
+
+10
+
+
+
+
+
+
+
+An Intelligent Government Complaint Prediction Approach Using Machine Learning Techniques
+Link : 
+https://www.sciencedirect.com/science/article/pii/S2214579622000302
+
+
+
+
+
+
+
+Traditional complaint handling systems are reactive rather than predictive.
+
+Lack of automated tools to predict complaint occurrences before they escalate.
+
+Manual categorization of grievances is inefficient and error-prone.
+
+
+
+To develop an intelligent prediction model for government complaints using machine learning.
+
+To improve grievance management efficiency by forecasting complaint likelihood.
+
+To enhance prioritization and resource allocation.
+
+To reduce administrative delays and improve citizen satisfaction.
+
+
+Collected historical complaint datasets from government sources.
+
+Applied machine learning algorithms (e.g., decision trees, SVM, random forest).
+
+Evaluated model performance across multiple metrics (accuracy, precision, recall).
+
+
+
+Machine learning can significantly improve complaint prediction accuracy.
+
+Predictive models help authorities anticipate and prepare for high-volume complaint periods.
+
+Early detection supports better resource distribution and response planning.
+
+Integrate real-time prediction modules within live grievance handling systems.
+
+Use deep learning and NLP for semantic complaint analysis.
+
+Explore hybrid models combining predictive analytics with human oversight.
+
+
+
+Our system already incorporates analytics dashboards that can be enhanced with prediction modules.
+
+The framework supports AI-powered complaint feedback and categorization, aligning with predictive insights.
+
+
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+S.No
+Reference with DOI
+Problem or gap addressed
+Objective of the
+Research
+Focus of the paper (Discuss methods used)
+Inference
+Recommendations
+for future research
+How can your research help bridge the gap?
+
+
+
+
+
+
+
+
+
+
+
+
+11
+
+
+
+
+
+
+
+From Text to Action: AI-Driven Classification of Public Service Complaints in Karanganyar, Indonesia
+Link : 
+https://www.researchgate.net/publication/330611295_Automatic_Complaint_Classification_System_Using_Classifier_Ensembles
+
+
+
+
+
+
+ Manual complaint handling causes delays. 
+
+
+
+ Lack of automated classification. 
+
+
+Limited scalability for large complaint volumes.
+
+
+
+ Automate complaint classification. 
+
+
+
+ Reduce human effort in sorting complaints. 
+
+
+
+
+ Improve response time of public services.
+
+
+Text preprocessing and tokenization. 
+
+
+
+
+
+Machine learning classifiers. 
+
+
+
+
+
+Text mining techniques.
+
+ Automated classification improves efficiency. 
+
+
+ Reduces workload on officials. 
+
+
+ Enhances accuracy in complaint routing.
+
+Support multilingual complaints. 
+
+
+
+Integrate real-time systems. 
+
+
+
+ Apply deep learning models.
+
+
+Our system performs real-time complaint classification. 
+
+
+ Supports text, image, and voice complaints. 
+
+
+ Automatically routes complaints to concerned departments.
+
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+S.No
+Reference with DOI
+Problem or gap addressed
+Objective of the
+Research
+Focus of the paper (Discuss methods used)
+Inference
+Recommendations
+for future research
+How can your research help bridge the gap?
+
+
+
+
+
+
+
+
+
+
+
+
+12
+
+
+
+
+
+
+
+Digital Grievance Redressal for Cleaner, Smarter India
+Link : 
+https://ijctjournal.org/?s=Digital+Grievance+Redressal+for+Cleaner%2C+Smarter+India
+
+
+
+
+ Traditional systems lack transparency. 
+
+
+
+
+Manual routing of grievances. 
+
+
+
+
+Poor citizen engagement.
+
+
+
+ Develop a smart digital grievance platform. 
+
+
+
+ Enable automated grievance routing. 
+
+
+
+ Improve citizen participation.
+
+
+
+
+ AI-based routing mechanisms. 
+
+
+ NLP for complaint analysis. 
+
+
+
+ Web-based grievance platform.
+
+
+Digital systems improve governance efficiency. 
+
+ Faster complaint resolution. 
+
+
+ Better communication with citizens.
+
+
+Add analytics and dashboards. 
+
+
+ Improve mobile accessibility. 
+
+
+ Use predictive analysis.
+
+
+ Our system adds real-time tracking and analytics dashboards. 
+
+ Provides anonymous complaint submission. 
+
+
+ Improves transparency through status notifications.
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+S.No
+Reference with DOI
+Problem or gap addressed
+Objective of the
+Research
+Focus of the paper (Discuss methods used)
+Inference
+Recommendations
+for future research
+How can your research help bridge the gap?
+
+
+
+
+
+
+
+
+
+
+
+
+13
+
+
+
+
+
+
+
+Strengthening Grievance Redressal Systems: Case Study of CPGRAMS
+Link : 
+https://www.sciencedirect.com/science/article/pii/S0306457323003485
+
+
+
+
+ Limited use of intelligent automation. 
+
+
+ 
+Delays in grievance resolution. 
+
+
+
+
+ Citizens lack interactive feedback.
+
+
+
+ Evaluate effectiveness of CPGRAMS. 
+
+
+
+Study impact on governance. 
+
+
+ Identify improvement areas.
+
+
+
+
+ Case study analysis. 
+
+
+
+
+ Policy evaluation. 
+
+
+
+
+ System performance analysis.
+
+
+
+Online grievance systems improve accountability. 
+
+ Enhances transparency. 
+
+
+ Builds public trust.
+
+
+Introduce AI-based tools. 
+
+
+ Improve grievance analytics. 
+
+
+Enable real-time interaction.
+
+
+ Our research integrates AI-driven analysis. 
+
+
+ Enables anonymous and secure grievance reporting. 
+
+
+ Provides department-wise performance insights.
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+S.No
+Reference with DOI
+Problem or gap addressed
+Objective of the
+Research
+Focus of the paper (Discuss methods used)
+Inference
+Recommendations
+for future research
+How can your research help bridge the gap?
+
+
+
+
+
+
+
+
+
+
+
+
+14
+
+
+
+
+
+
+Need Assessment of a Digital Grievance Redressal System (DGRS) for Hospital Administration
+Link : 
+https://www.sciencedirect.com/science/article/pii/S2214579622000302
+
+
+
+
+ Manual grievance handling in hospitals. 
+
+
+
+
+
+ Lack of transparency. 
+
+
+
+
+
+ Delayed response to citizen complaints.
+
+
+
+
+Identify challenges in hospital grievance systems. 
+
+
+ Assess need for digital solutions. 
+
+
+
+
+ Improve citizen satisfaction
+
+
+
+
+ Requirement analysis. 
+
+
+
+Surveys and interviews. 
+
+
+
+
+ System gap analysis.
+
+
+Digital systems improve healthcare quality. 
+
+
+Faster grievance resolution. 
+
+
+ Better citizen trust.
+
+
+Implement secure and scalable systems. 
+
+
+ Integrate emergency response. 
+
+
+ Use AI-based complaint analysis.
+
+
+ Our system supports emergency SOS features. 
+
+
+ Ensures secure and anonymous complaints. 
+
+
+
+ Enables faster resolution through automated routing.
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+S.No
+Reference with DOI
+Problem or gap addressed
+Objective of the
+Research
+Focus of the paper (Discuss methods used)
+Inference
+Recommendations
+for future research
+How can your research help bridge the gap?
+
+
+
+
+
+
+
+
+
+
+
+
+15
+
+
+
+
+
+
+Automatic Complaint Classification System Using Classifier Ensembles
+Link : 
+https://www.sciencedirect.com/science/article/pii/S2590005625001973
+
+
+
+
+ Single classifiers have low accuracy. 
+
+
+
+
+
+ Poor handling of complex complaints. 
+
+
+
+
+ Limited real-world deployment.
+
+
+
+
+IImprove complaint classification accuracy. 
+
+
+
+
+ Compare multiple classifiers. 
+
+
+
+ Enhance e-governance systems.
+
+
+
+
+ Ensemble learning methods. 
+
+
+
+ Performance evaluation metrics. 
+
+
+
+
+ Comparative analysis.
+
+
+Ensemble models improve accuracy. 
+
+
+Better handling of diverse complaints. 
+
+
+ Suitable for large datasets.
+
+
+Deploy models in live systems. 
+
+
+ Use deep learning approaches. 
+
+
+ Integrate feedback learning.
+
+
+ Our system deploys NLP models in real-time. 
+
+
+ Continuously learns from past complaints. 
+
+
+ Integrates classification with end-to-end grievance workflow.
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+     Department of Computer Science and Engineering
+EXISTING SYSTEM & LIMITATIONS
+Existing System:
+The existing grievance redressal systems are primarily based on traditional web portals, manual complaint registers, or email-based communication channels. In many government and institutional setups, citizens are required to submit grievances through static online forms, physical complaint boxes, or by visiting offices in person. These systems usually provide limited tracking mechanisms, where users receive minimal updates on complaint status, often relying on manual follow-ups or delayed responses from authorities. Most current platforms lack real-time communication between citizens and officials, and grievance processing is largely manual, leading to increased resolution time. Identity disclosure is often mandatory, which discourages citizens from reporting sensitive issues due to fear of retaliation or privacy concerns. Additionally, existing systems rarely support multimedia evidence such as images or videos, and if supported, they lack automated privacy-preserving mechanisms. Analytical capabilities are also limited, with authorities having minimal tools to assess complaint trends, performance metrics, or departmental workloads. Emergency reporting and intelligent assistance through chatbots or automated guidance are generally absent in conventional grievance systems.
+
+Limitations:
+Limited transparency and delayed grievance updates
+Manual processing increases resolution time
+No support for anonymous complaint submission
+Lack of AI-based categorization and analytics
+Poor scalability for handling large complaint volumes
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+PROPOSED SYSTEM
+The proposed system is a smart, secure, and scalable grievance management platform aimed at enhancing transparency, efficiency, and accountability in public grievance redressal. The system is designed with separate interfaces for citizens and authorities to ensure structured interaction and effective complaint resolution.
+
+Citizens can submit grievances through a unified portal by providing detailed descriptions along with supporting images, videos, or documents.
+An AI-based face blurring mechanism automatically anonymizes faces in uploaded images and videos to protect user identity.
+An NLP-based module analyzes and categorizes complaints and notices to improve clarity, organization, and processing efficiency.
+The system provides an anonymous chat feature that enables secure, real-time communication between citizens and authorities without revealing identities.
+Authorities are provided with a centralized dashboard to view, prioritize, and resolve pending grievances efficiently.
+An Emergency SOS feature allows users to send instant alerts for urgent situations to the concerned authorities.
+An analytics dashboard helps authorities visualize complaint trends, resolution time, and departmental performance.
+All grievance records and multimedia evidence are securely stored using cloud storage for scalability and reliability
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+
+PROBLEM STATEMENT
+
+Traditional grievance redressal mechanisms in government and institutional systems are largely manual, fragmented, and time-consuming. Citizens are often required to submit complaints through physical visits, static web portals, or email-based systems that provide limited transparency and delayed updates. The lack of real-time tracking, secure communication, and structured complaint handling leads to inefficiencies, poor accountability, and reduced trust in the grievance resolution process.Additionally, existing systems typically require mandatory identity disclosure, discouraging individuals from reporting sensitive or critical issues due to privacy and safety concerns. The absence of intelligent tools such as NLP-based complaint categorization, analytics, and automated assistance further increases the workload on authorities and delays resolution. These limitations highlight the need for a secure, scalable, and citizen-centric grievance management platform that supports anonymity, real-time interaction, intelligent analysis, and transparent monitoring to improve public service delivery and accountability.
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+OBJECTIVES
+To provide a unified digital platform for submitting and managing public grievances efficiently.
+To enable real-time tracking of complaint status for improved transparency and user trust.
+To support anonymous grievance submission and communication to protect citizen privacy.
+To utilize NLP techniques for automatic categorization and analysis of complaints and notices.
+To allow citizens to upload multimedia evidence with AI-based face blurring for identity protection.
+To facilitate secure, real-time interaction between citizens and authorities through anonymous chat.
+To provide authorities with analytical dashboards for monitoring complaint trends and resolution performance.
+To support emergency reporting through an SOS feature for urgent situations.
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+METHODOLOGY
+Input & Authentication
+User accesses the grievance portal and logs in using secure authentication.
+System provides role-based access for citizens and authorities.
+
+Grievance Submission
+Citizens submit grievances with descriptions and multimedia evidence.
+Location and category details help route complaints to the concerned department.
+
+Privacy & Processing
+AI-based face blurring ensures anonymity in uploaded images and videos.
+Grievance data is securely stored using cloud storage and databases.
+
+NLP Analysis & Communication
+NLP techniques categorize complaints and organize notices.
+Anonymous chat enables secure, real-time communication between users and authorities.
+
+Tracking & Resolution
+Users track complaint status through the dashboard.
+Authorities analyze trends and resolve grievances using analytics tools.
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+ARCHITECTURE
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+MODULES
+
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+HARDWARE:
+Laptop/PC with Intel i5 / AMD Ryzen 5 processor or higher
+Minimum 8 GB RAM (16 GB recommended for development and testing)
+Stable internet connection for real-time communication and cloud services
+Smartphone (Android/iOS) for testing user-side features such as uploads and notifications
+
+SOFTWARE:
+Operating System: Windows 10/11 or macOS
+Frontend: Next.js (React-based framework)
+Backend: Node.js with Express
+Database: MongoDB
+Authentication: JWT / OAuth-based authentication
+Cloud Storage: For storing images, videos, and documents
+AI & NLP Tools: Python-based microservices or APIs for face blurring, text analysis, and chatbot
+Real-Time Communication: Socket.io for chat and notifications
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+FUNCTIONAL REQUIREMENTS
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+PHASE 1 – RESEARCH & DESIGN
+Week 1–3: Problem analysis, requirement gathering, and finalization of abstract
+Week 4–8: Literature survey on e-governance systems, grievance management, NLP, and privacy mechanisms
+Week 9–12: System requirement specification, data flow analysis, and use-case design
+Week 13–16: System architecture design and technology stack finalization
+PHASE 2 – DEVELOPMENT & TESTING
+Week 17–22: Frontend and backend development (complaint submission, authentication, chat, NLP integration, face blur, analytics)
+Week 23–24: System testing, bug fixing, performance evaluation, and deployment
+PHASE 3 – DOCUMENTATION & PRESENTATION
+Week 25–31: Project documentation, report writing, and thesis preparation
+Week 32: Final presentation, review, and project submission
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+WORK DISTRIBUTION
+
+VNR Vignana Jyothi Institute Of Engineering and Technology
+Department of Computer Science and Engineering
+Adaptive governance: Towards a stable, accountable and responsive government Journal: Computers in Human Behavior, Elsevier
+Link: https://www.sciencedirect.com/science/article/pii/S0747563216300711
+
+The impact of consumer complaints on corporate digital transformation Link: https://www.sciencedirect.com/science/article/pii/S1059056025003661
+
+Case Complexity and Citizen Satisfaction with Local Public Services Link: https://www.sciencedirect.com/science/article/abs/pii/S0305750X12001490
+
+CitySolution: A Complaint Task Distributive Mobile Application for Urban Management Link: https://www.sciencedirect.com/science/article/pii/S2352711024002000
+
+How can citizen complaints improve public services? Evidence from a big data approach Link: https://www.sciencedirect.com/science/article/pii/S0306457323003485
+
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP
+REFERENCES
+
+THANK YOU
+SMART GRIEVANCE MANAGEMENT PORTAL WITH NLP

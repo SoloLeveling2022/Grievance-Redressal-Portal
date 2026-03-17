@@ -2,7 +2,7 @@
 
 # dependencies
 /node_modules
-
+backend/__pycache__/
 # next.js
 /.next/
 /out/

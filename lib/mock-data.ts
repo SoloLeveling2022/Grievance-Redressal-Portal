@@ -1,0 +1,365 @@
+export const mockcitizenData = {
+  citizens: [
+    {
+      id: "1",
+      name: "John Doe",
+      email: "john.doe@email.com",
+      age: 32,
+      gender: "Male",
+      phone: "+1-555-0123",
+      recentActivity: [
+        {
+          title: "Symptom Report Submitted",
+          date: "2024-01-15",
+          type: "report",
+        },
+        {
+          title: "Video Consultation with Dr. Smith",
+          date: "2024-01-12",
+          type: "appointment",
+        },
+        {
+          title: "Lab Results Available",
+          date: "2024-01-10",
+          type: "lab",
+        },
+      ],
+      upcomingAppointments: [
+        {
+          id: "1",
+          officers: "Dr. Sarah Smith",
+          specialty: "General Medicine",
+          date: "2024-01-20",
+          time: "2:00 PM",
+          type: "video",
+        },
+        {
+          id: "2",
+          officers: "Dr. Michael Johnson",
+          specialty: "Cardiology",
+          date: "2024-01-25",
+          time: "10:30 AM",
+          type: "in-person",
+        },
+      ],
+    },
+  ],
+  medicalRecords: [
+    {
+      "id": "1",
+      "title": "Website Usability Feedback",
+      "description": "User reported difficulty navigating the grievance submission form on the React-based platform",
+      "date": "2024-01-15",
+      "submittedBy": "Anonymous",
+      "type": "feedback"
+    },
+    {
+      "id": "2",
+      "title": "Grievance: Delayed Response Time",
+      "description": "Complaint about delayed response to a grievance submitted via the secure web platform",
+      "date": "2024-01-12",
+      "submittedBy": "Anonymous",
+      "type": "grievance"
+    },
+    {
+      "id": "3",
+      "title": "Chatbot Assistance Query",
+      "description": "User inquired about grievance submission process through Dialogflow chatbot",
+      "date": "2024-01-10",
+      "submittedBy": "Anonymous",
+      "type": "audit"
+    },
+    {
+      "id": "4",
+      "title": "System Performance Metrics",
+      "description": "Admin dashboard reported 98% uptime and 150ms average response time for Laravel backend",
+      "date": "2024-01-08",
+      "submittedBy": "System Admin",
+      "type": "system_report"
+    },
+    {
+      "id": "5",
+      "title": "Data Security Audit",
+      "description": "Encrypted data storage audit completed, confirming no vulnerabilities in Django-based system",
+      "date": "2024-01-05",
+      "submittedBy": "Security Team",
+      "type": "audit"
+    }
+  ],
+}
+
+export const mockofficersData = {
+  officerss: [
+    {
+      id: "1",
+      name: "Sarah Smith",
+      specialty: "General Medicine",
+      email: "dr.smith@hospital.com",
+      totalcitizens: 156,
+      todayAppointments: 8,
+      pendingReviews: 12,
+      citizens: [
+        {
+          id: "1",
+          name: "John Doe",
+          condition: "Upper Respiratory Infection",
+          urgency: "low",
+          lastVisit: "2024-01-12",
+          nextAppointment: "2024-01-20",
+        },
+        {
+          id: "2",
+          name: "Jane Smith",
+          condition: "Hypertension Follow-up",
+          urgency: "medium",
+          lastVisit: "2024-01-10",
+          nextAppointment: "2024-01-18",
+        },
+        {
+          id: "3",
+          name: "Robert Johnson",
+          condition: "Chest Pain Evaluation",
+          urgency: "high",
+          lastVisit: "2024-01-15",
+          nextAppointment: "Today",
+        },
+        {
+          id: "4",
+          name: "Emily Davis",
+          condition: "Diabetes Management",
+          urgency: "medium",
+          lastVisit: "2024-01-08",
+          nextAppointment: "2024-01-22",
+        },
+      ],
+      todaySchedule: [
+        {
+          time: "9:00 AM",
+          citizen: "Robert Johnson",
+          type: "Emergency Consultation",
+          status: "upcoming",
+        },
+        {
+          time: "10:30 AM",
+          citizen: "Mary Wilson",
+          type: "Follow-up Visit",
+          status: "completed",
+        },
+        {
+          time: "2:00 PM",
+          citizen: "John Doe",
+          type: "Video Consultation",
+          status: "upcoming",
+        },
+        {
+          time: "3:30 PM",
+          citizen: "Jane Smith",
+          type: "Routine Checkup",
+          status: "upcoming",
+        },
+      ],
+    },
+  ],
+}
+
+export const mockChatData = {
+  messages: [
+    {
+      id: "1",
+      content: "Hello! I'm your AI health assistant. How can I help you today?",
+      sender: "ai" as const,
+      timestamp: "9:00 AM",
+      type: "text" as const,
+    },
+    {
+      id: "2",
+      content: "I've been having a headache for the past two days. Should I be concerned?",
+      sender: "user" as const,
+      timestamp: "9:02 AM",
+      type: "text" as const,
+    },
+    {
+      id: "3",
+      content:
+        "I understand you're experiencing headaches. Can you tell me more about the pain? Is it constant or does it come and go? What's the intensity on a scale of 1-10?",
+      sender: "ai" as const,
+      timestamp: "9:02 AM",
+      type: "text" as const,
+    },
+    {
+      id: "4",
+      content: "It's about a 6/10 and seems to be constant, especially in the morning.",
+      sender: "user" as const,
+      timestamp: "9:05 AM",
+      type: "text" as const,
+    },
+    {
+      id: "5",
+      content: "Dr. Smith has joined the conversation.",
+      sender: "system" as const,
+      timestamp: "9:10 AM",
+      type: "system" as const,
+    },
+    {
+      id: "6",
+      content:
+        "Hi John! I've reviewed your symptoms. Based on what you've described, this could be tension headaches. Let's schedule a video call to discuss this further.",
+      sender: "officers" as const,
+      timestamp: "9:12 AM",
+      type: "text" as const,
+    },
+  ],
+}
+
+export const mockAppointmentData = {
+  citizenAppointments: [
+    {
+      id: "1",
+      officers: "Dr. Sarah Smith",
+      specialty: "General Medicine",
+      date: "2024-01-20",
+      time: "2:00 PM",
+      type: "video",
+      status: "confirmed",
+      reason: "Follow-up consultation for respiratory symptoms",
+      location: null,
+    },
+    {
+      id: "2",
+      officers: "Dr. Michael Johnson",
+      specialty: "Cardiology",
+      date: "2024-01-25",
+      time: "10:30 AM",
+      type: "in-person",
+      status: "confirmed",
+      reason: "Routine cardiac checkup and blood pressure monitoring",
+      location: "Cardiology Department, Floor 3",
+    },
+    {
+      id: "3",
+      officers: "Dr. Emily Davis",
+      specialty: "Dermatology",
+      date: "2024-01-18",
+      time: "3:00 PM",
+      type: "video",
+      status: "pending",
+      reason: "Skin rash evaluation and treatment consultation",
+      location: null,
+    },
+    {
+      id: "4",
+      officers: "Dr. Robert Wilson",
+      specialty: "Orthopedics",
+      date: "2024-01-15",
+      time: "11:00 AM",
+      type: "in-person",
+      status: "completed",
+      reason: "Knee pain assessment and physical therapy recommendations",
+      location: "Orthopedics Clinic, Building B",
+    },
+    {
+      id: "5",
+      officers: "Dr. Lisa Brown",
+      specialty: "Psychiatry",
+      date: "2024-01-22",
+      time: "4:30 PM",
+      type: "phone",
+      status: "confirmed",
+      reason: "Mental health consultation and medication review",
+      location: null,
+    },
+    {
+      id: "6",
+      officers: "Dr. Sarah Smith",
+      specialty: "General Medicine",
+      date: "2024-01-12",
+      time: "1:00 PM",
+      type: "video",
+      status: "cancelled",
+      reason: "General health consultation",
+      location: null,
+    },
+  ],
+  officersAppointments: [
+    {
+      id: "1",
+      citizen: "John Doe",
+      date: "2024-01-20",
+      time: "2:00 PM",
+      type: "video",
+      status: "confirmed",
+      reason: "Follow-up consultation for respiratory symptoms",
+      notes: "citizen reported improvement in symptoms",
+    },
+    {
+      id: "2",
+      citizen: "Jane Smith",
+      date: "2024-01-18",
+      time: "10:00 AM",
+      type: "in-person",
+      status: "pending",
+      reason: "Hypertension follow-up and medication adjustment",
+      notes: "New citizen, requires comprehensive evaluation",
+    },
+    {
+      id: "3",
+      citizen: "Robert Johnson",
+      date: new Date().toISOString().split("T")[0], // Today
+      time: "9:00 AM",
+      type: "video",
+      status: "confirmed",
+      reason: "Chest pain evaluation and cardiac assessment",
+      notes: "Urgent consultation requested",
+    },
+    {
+      id: "4",
+      citizen: "Emily Davis",
+      date: new Date().toISOString().split("T")[0], // Today
+      time: "11:30 AM",
+      type: "phone",
+      status: "confirmed",
+      reason: "Diabetes management and blood sugar monitoring",
+      notes: "Regular monthly check-in",
+    },
+    {
+      id: "5",
+      citizen: "Michael Brown",
+      date: "2024-01-19",
+      time: "3:30 PM",
+      type: "in-person",
+      status: "pending",
+      reason: "Annual physical examination and health screening",
+      notes: "First-time citizen, complete medical history needed",
+    },
+    {
+      id: "6",
+      citizen: "Sarah Wilson",
+      date: new Date().toISOString().split("T")[0], // Today
+      time: "2:30 PM",
+      type: "video",
+      status: "completed",
+      reason: "Medication side effects consultation",
+      notes: "citizen experiencing mild side effects from new medication",
+    },
+    {
+      id: "7",
+      citizen: "David Lee",
+      date: "2024-01-21",
+      time: "4:00 PM",
+      type: "video",
+      status: "confirmed",
+      reason: "Mental health consultation and therapy follow-up",
+      notes: "Ongoing treatment for anxiety and depression",
+    },
+    {
+      id: "8",
+      citizen: "Lisa Garcia",
+      date: "2024-01-17",
+      time: "1:30 PM",
+      type: "phone",
+      status: "pending",
+      reason: "Prescription refill and dosage adjustment",
+      notes: "citizen requesting medication review",
+    },
+  ],
+}

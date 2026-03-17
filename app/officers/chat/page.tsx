@@ -1,0 +1,291 @@
+﻿"use client"
+
+import React, { useState, useRef, useEffect, KeyboardEvent } from "react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Badge } from "@/components/ui/badge"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  Send, User, Paperclip, Mic, Shield, Phone, Video,
+} from "lucide-react"
+import { OfficersLayout } from "@/components/doctor/officer-layout"
+import { getSocket } from "@/lib/socket"
+
+type AuthorityId = "police" | "municipal" | "health" | "traffic" | "revenue"
+
+type Message = {
+  id: string
+  content: string
+  sender: "citizen" | "authority"
+  citizenId: string
+  authority: AuthorityId
+  timestamp: string
+  type: "text"
+}
+
+type PresenceCitizen = {
+  id: string
+  authority: AuthorityId | null
+}
+
+const AUTHORITY_LABELS: Record<AuthorityId, string> = {
+  police: "Police",
+  municipal: "Municipal",
+  health: "Health",
+  traffic: "Traffic",
+  revenue: "Revenue",
+}
+
+export default function GrievanceChat() {
+  const [selectedCitizen, setSelectedCitizen] = useState<string>("")
+  const [messages, setMessages] = useState<Message[]>([])
+  const [newMessage, setNewMessage] = useState("")
+  const [citizensOnline, setCitizensOnline] = useState<PresenceCitizen[]>([])
+  const [citizenTyping, setCitizenTyping] = useState(false)
+  const [officerId, setOfficerId] = useState("")
+  const [connected, setConnected] = useState(false)
+  const messagesEndRef = useRef<HTMLDivElement | null>(null)
+  const typingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    const id = `OFFICER-${Math.random().toString(36).substr(2, 6).toUpperCase()}`
+    setOfficerId(id)
+    const socket = getSocket()
+
+    const onConnect = () => {
+      setConnected(true)
+      socket.emit("join", { role: "officer", id })
+    }
+
+    const onDisconnect = () => {
+      setConnected(false)
+      setCitizensOnline([])
+      setSelectedCitizen("")
+    }
+
+    const onPresence = ({ citizens }: { citizens: PresenceCitizen[]; officersOnline: boolean }) => {
+      setCitizensOnline(citizens)
+      if (!selectedCitizen && citizens.length > 0) {
+        setSelectedCitizen(citizens[0].id)
+      }
+      if (selectedCitizen && !citizens.some(c => c.id === selectedCitizen)) {
+        setSelectedCitizen(citizens[0]?.id || "")
+      }
+    }
+
+    const onNewMessage = (msg: Message) => {
+      setMessages(prev => [...prev, msg])
+    }
+
+    const onTyping = ({ fromRole, isTyping }: { fromRole: string; isTyping: boolean }) => {
+      if (fromRole === "citizen") setCitizenTyping(isTyping)
+    }
+
+    socket.on("connect", onConnect)
+    socket.on("disconnect", onDisconnect)
+    socket.on("presence", onPresence)
+    socket.on("new_message", onNewMessage)
+    socket.on("typing", onTyping)
+
+    if (socket.connected) onConnect()
+
+    return () => {
+      socket.off("connect", onConnect)
+      socket.off("disconnect", onDisconnect)
+      socket.off("presence", onPresence)
+      socket.off("new_message", onNewMessage)
+      socket.off("typing", onTyping)
+    }
+  }, [selectedCitizen])
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }, [messages, selectedCitizen, citizenTyping])
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewMessage(e.target.value)
+    const socket = getSocket()
+    socket.emit("typing", { fromRole: "officer", isTyping: true })
+    if (typingTimeout.current) clearTimeout(typingTimeout.current)
+    typingTimeout.current = setTimeout(() => {
+      socket.emit("typing", { fromRole: "officer", isTyping: false })
+    }, 1500)
+  }
+
+  const handleSendMessage = () => {
+    if (!newMessage.trim() || !selectedCitizen) return
+
+    const citizen = citizensOnline.find(c => c.id === selectedCitizen)
+    const authority = (citizen?.authority || "police") as AuthorityId
+
+    const socket = getSocket()
+    socket.emit("send_message", {
+      content: newMessage,
+      sender: "authority",
+      citizenId: selectedCitizen,
+      authority,
+      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      type: "text",
+    })
+
+    if (typingTimeout.current) clearTimeout(typingTimeout.current)
+    socket.emit("typing", { fromRole: "officer", isTyping: false })
+    setNewMessage("")
+  }
+
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault()
+      handleSendMessage()
+    }
+  }
+
+  const currentMessages = messages.filter(m => m.citizenId === selectedCitizen)
+
+  return (
+    <OfficersLayout>
+      <div className="min-h-screen">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-4 flex items-center justify-between flex-wrap gap-2">
+            <h1 className="text-2xl font-bold text-gray-900">Officer Live Chat</h1>
+            <div className="flex items-center gap-2">
+              <Badge variant="outline">Officer ID: {officerId || "..."}</Badge>
+              <Badge className={connected ? "bg-green-500 text-white" : ""} variant={connected ? "default" : "secondary"}>
+                {connected ? "Connected" : "Disconnected"}
+              </Badge>
+            </div>
+          </div>
+
+          <div className="flex gap-6 h-[calc(100vh-240px)]">
+            <Card className="w-96 flex flex-col shadow-lg">
+              <CardHeader className="pb-4 border-b">
+                <CardTitle className="text-xl">Online Citizens ({citizensOnline.length})</CardTitle>
+              </CardHeader>
+              <CardContent className="flex-1 overflow-y-auto p-0">
+                <div className="space-y-2 p-4">
+                  {citizensOnline.length === 0 && (
+                    <p className="text-sm text-gray-500">No citizen tab connected yet.</p>
+                  )}
+                  {citizensOnline.map(citizen => {
+                    const unread = messages.filter(m => m.citizenId === citizen.id && m.sender === "citizen").length
+                    return (
+                      <div
+                        key={citizen.id}
+                        onClick={() => setSelectedCitizen(citizen.id)}
+                        className={`p-4 cursor-pointer rounded-lg border transition-all duration-200 ${selectedCitizen === citizen.id ? "bg-blue-50 border-blue-200 shadow-md" : "hover:bg-gray-50 border-gray-200"}`}
+                      >
+                        <div className="flex items-center justify-between mb-1">
+                          <p className="font-semibold text-gray-900">{citizen.id}</p>
+                          {unread > 0 && <span className="w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs">{unread}</span>}
+                        </div>
+                        <p className="text-xs text-gray-600">Department: {citizen.authority ? AUTHORITY_LABELS[citizen.authority] : "Unknown"}</p>
+                        <div className="flex items-center gap-2 mt-2 text-xs">
+                          <span className="w-2 h-2 bg-green-500 rounded-full" />
+                          <span className="text-gray-600">Online</span>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="flex-1 flex flex-col">
+              <Card className="mb-4 shadow-lg">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="text-xl">{selectedCitizen || "Select a citizen"}</CardTitle>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="w-2 h-2 bg-green-500 rounded-full" />
+                        <span className="text-sm text-gray-600">Live session</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Button variant="outline" size="sm" className="hidden md:flex"><Phone className="h-4 w-4" /><span className="ml-1">Call</span></Button>
+                      <Button variant="outline" size="sm" className="hidden md:flex"><Video className="h-4 w-4" /><span className="ml-1">Video</span></Button>
+                    </div>
+                  </div>
+                  <div className="mt-3 p-3 bg-blue-50 rounded-lg">
+                    <p className="text-sm text-blue-700"><Shield className="h-4 w-4 inline mr-1" />Citizen identity is protected. Live synchronized messaging enabled.</p>
+                  </div>
+                </CardHeader>
+              </Card>
+
+              <Card className="flex-1 flex flex-col shadow-lg overflow-hidden">
+                <CardContent className="flex-1 overflow-y-auto p-6 space-y-4">
+                  {!selectedCitizen ? (
+                    <div className="text-center py-12 text-gray-500">Select a citizen from the left panel to start chatting.</div>
+                  ) : currentMessages.length === 0 ? (
+                    <div className="text-center py-12 text-gray-500">No messages yet.</div>
+                  ) : (
+                    <>
+                      {currentMessages.map(message => (
+                        <div key={message.id} className={`flex ${message.sender === "authority" ? "justify-end" : "justify-start"}`}>
+                          <div className={`flex items-start space-x-3 max-w-[75%] ${message.sender === "authority" ? "flex-row-reverse space-x-reverse" : ""}`}>
+                            <Avatar className="w-10 h-10 shadow-md">
+                              {message.sender === "authority" ? (
+                                <AvatarFallback className="bg-gray-200"><Shield className="h-5 w-5 text-gray-600" /></AvatarFallback>
+                              ) : (
+                                <AvatarFallback className="bg-blue-100"><User className="h-5 w-5 text-blue-600" /></AvatarFallback>
+                              )}
+                            </Avatar>
+                            <div className="flex flex-col">
+                              <div className={`rounded-2xl px-4 py-3 shadow-sm ${message.sender === "authority" ? "bg-blue-500 text-white rounded-br-md" : "bg-white border border-gray-200 rounded-bl-md"}`}>
+                                <p className="text-sm leading-relaxed">{message.content}</p>
+                              </div>
+                              <div className={`flex items-center mt-1 space-x-2 ${message.sender === "authority" ? "justify-end" : "justify-start"}`}>
+                                <span className="text-xs text-gray-500">{message.timestamp}</span>
+                                <Badge variant="outline" className="text-xs">{message.sender === "authority" ? "You" : "Citizen"}</Badge>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+
+                      {citizenTyping && (
+                        <div className="flex justify-start">
+                          <div className="flex items-start space-x-3">
+                            <Avatar className="w-10 h-10 shadow-md"><AvatarFallback className="bg-blue-100"><User className="h-5 w-5 text-blue-600" /></AvatarFallback></Avatar>
+                            <div className="bg-white border border-gray-200 rounded-2xl rounded-bl-md px-4 py-3 shadow-sm">
+                              <div className="flex space-x-1">
+                                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
+                                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }} />
+                                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }} />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                  <div ref={messagesEndRef} />
+                </CardContent>
+
+                <div className="border-t bg-gray-50 p-4">
+                  <div className="flex items-center space-x-3">
+                    <Button variant="outline" size="sm" className="shrink-0"><Paperclip className="h-4 w-4" /></Button>
+                    <Input value={newMessage} onChange={handleInputChange} onKeyPress={handleKeyPress} placeholder={selectedCitizen ? `Respond to ${selectedCitizen}...` : "Select a citizen first"} className="bg-white" disabled={!selectedCitizen} />
+                    <Select defaultValue="response">
+                      <SelectTrigger className="w-32 bg-white"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="response">Response</SelectItem>
+                        <SelectItem value="query">Query</SelectItem>
+                        <SelectItem value="escalation">Escalation</SelectItem>
+                        <SelectItem value="urgent">Urgent</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Button variant="outline" size="sm" className="shrink-0"><Mic className="h-4 w-4" /></Button>
+                    <Button onClick={handleSendMessage} disabled={!newMessage.trim() || !selectedCitizen} className="shrink-0 bg-blue-500 hover:bg-blue-600"><Send className="h-4 w-4" /></Button>
+                  </div>
+                </div>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </div>
+    </OfficersLayout>
+  )
+}

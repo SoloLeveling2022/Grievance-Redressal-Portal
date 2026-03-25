@@ -176,14 +176,14 @@ export default function FileComplaintPage() {
           </p>
         </div>
 
-        {/* Voice Agent Card */}
+        {/* Agent Card */}
         {/* <Card className="border-2 border-blue-200 bg-blue-50 dark:bg-blue-900/20">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <PhoneCall className="h-5 w-5 text-blue-600" />
-              <span>Voice Agent for Complaint Filing</span>
+              <span>Agent for Complaint Filing</span>
             </CardTitle>
-            <CardDescription>Get assistance from our AI voice agent to file your complaint</CardDescription>
+            <CardDescription>Get assistance from our AI agent to file your complaint</CardDescription>
           </CardHeader>
           <CardContent>
             <Button
@@ -195,12 +195,12 @@ export default function FileComplaintPage() {
               {isCallInitiating ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Initiating Voice AI Call...
+                  Initiating AI Call...
                 </>
               ) : (
                 <>
                   <PhoneCall className="h-4 w-4 mr-2" />
-                  Start Complaint Voice Agent
+                  Start Complaint Agent
                 </>
               )}
             </Button>

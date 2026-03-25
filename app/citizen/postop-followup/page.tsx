@@ -78,12 +78,12 @@ export default function FollowUpsFeedbackPage() {
           </p>
         </div>
 
-        {/* Voice AI Call Section */}
+        {/* AI Call Section */}
         {/* <Card className="border-2 border-blue-200 bg-blue-50 dark:bg-blue-900/20">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <PhoneCall className="h-5 w-5 text-blue-600" />
-              <span>Voice Agent Demo (Follow-ups)</span>
+              <span>Agent Demo (Follow-ups)</span>
             </CardTitle>
             <CardDescription>Get a demo call from our AI assistant for follow-ups</CardDescription>
           </CardHeader>
@@ -97,12 +97,12 @@ export default function FollowUpsFeedbackPage() {
               {isCallInitiating ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Initiating Voice AI Call...
+                  Initiating AI Call...
                 </>
               ) : (
                 <>
                   <PhoneCall className="h-4 w-4 mr-2" />
-                  Start Follow-ups Voice Agent
+                  Start Follow-ups Agent
                 </>
               )}
             </Button>

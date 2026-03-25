@@ -484,15 +484,15 @@ export const translations = {
     healthFitnessPlan: "Health & Fitness Plan",
     workout: "Workout Trainer",
 
-    // OmniDim Voice Appointment Booking
-    voiceAppointmentBooking: "Voice Appointment Booking",
-    voiceAppointmentBookingDesc: "Book appointments through voice calls with our AI assistant",
-    voiceCall: "Voice Call",
+    // OmniDim Appointment Booking
+    voiceAppointmentBooking: "Appointment Booking",
+    voiceAppointmentBookingDesc: "Book appointments through calls with our AI assistant",
+    voiceCall: "Call",
     manualBooking: "Manual Booking",
     phoneNumber: "Phone Number",
     citizenName: "citizen Name",
     citizenNamePlaceholder: "Enter citizen's full name",
-    startVoiceCall: "Start Voice Call",
+    startVoiceCall: "Start Call",
     endCall: "End Call",
     callTranscript: "Call Transcript",
     appointmentBooked: "Appointment Booked",
@@ -510,7 +510,7 @@ export const translations = {
 
     // Call Analytics
     callAnalytics: "Call Analytics",
-    callAnalyticsDesc: "Monitor voice call performance and appointment booking statistics",
+    callAnalyticsDesc: "Monitor call performance and appointment booking statistics",
     totalCalls: "Total Calls",
     successfulBookings: "Successful Bookings",
     averageCallDuration: "Avg. Call Duration",
@@ -521,7 +521,7 @@ export const translations = {
     dailyStats: "Daily Statistics",
     last7Days: "Last 7 days",
     callLogs: "Call Logs",
-    callLogsDesc: "Detailed logs of all voice calls and their outcomes",
+    callLogsDesc: "Detailed logs of all calls and their outcomes",
     filterByDate: "Filter by Date",
     filterByStatus: "Filter by Status",
     filterBySentiment: "Filter by Sentiment",
@@ -1052,7 +1052,7 @@ export const translations = {
     healthFitnessPlan: "स्वास्थ्य और फिटनेस योजना",
     workout: "वर्कआउट",
 
-    // OmniDim Voice Appointment Booking
+    // OmniDim Appointment Booking
     voiceAppointmentBooking: "वॉइस अपॉइंटमेंट बुकिंग",
     voiceAppointmentBookingDesc: "हमारे AI सहायक के साथ वॉइस कॉल के माध्यम से अपॉइंटमेंट बुक करें",
     voiceCall: "वॉइस कॉल",

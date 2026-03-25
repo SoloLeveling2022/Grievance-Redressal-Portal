@@ -51,12 +51,12 @@ export default function RemindersPage() {
   return (
     <CitizenLayout>
       <div className="max-w-2xl mx-auto py-8 space-y-6">
-        {/* Voice Agent Trigger */}
+        {/* Agent Trigger */}
         {/* <Card className="border-2 border-blue-200 bg-blue-50 dark:bg-blue-900/20">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <PhoneCall className="h-5 w-5 text-blue-600" />
-              <span>Voice Agent for Updates</span>
+              <span>Agent for Updates</span>
             </CardTitle>
             <CardDescription>Get your complaint updates by phone via our AI agent</CardDescription>
           </CardHeader>
@@ -70,12 +70,12 @@ export default function RemindersPage() {
               {isCallInitiating ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Initiating Voice AI Call...
+                  Initiating AI Call...
                 </>
               ) : (
                 <>
                   <PhoneCall className="h-4 w-4 mr-2" />
-                  Start Updates Voice Agent
+                  Start Updates Agent
                 </>
               )}
             </Button>

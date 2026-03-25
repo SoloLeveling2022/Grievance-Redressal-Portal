@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(data)
   } catch (error) {
-    console.error('Voice call API error:', error)
+    console.error('call API error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

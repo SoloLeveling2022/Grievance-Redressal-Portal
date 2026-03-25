@@ -56,39 +56,6 @@ export default function FollowUpsFeedbackPage() {
   const [callStatus, setCallStatus] = useState<string | null>(null)
   const [callError, setCallError] = useState<string | null>(null)
 
-  const handleVoiceAICall = async () => {
-    setIsCallInitiating(true)
-    setCallStatus("Initiating follow-ups voice agent demo...")
-    setCallError(null)
-
-    try {
-      const response = await fetch("https://api.bolna.ai/call", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer bn-06d2bf09278141bea83202353e9893f1`,
-        },
-        body: JSON.stringify({
-          agent_id: "321a8372-145a-44c1-b626-f40d880367d4",
-          recipient_phone_number: "+917981367685",
-        }),
-      })
-
-      const data = await response.json()
-      if (response.ok) {
-        setCallStatus("✅ Follow-ups voice agent initiated!")
-        setTimeout(() => setCallStatus(null), 5000)
-      } else {
-        setCallError(data.error || "Failed to initiate call")
-        setTimeout(() => setCallError(null), 5000)
-      }
-    } catch (err) {
-      setCallError("❌ Error connecting to voice AI service")
-      setTimeout(() => setCallError(null), 5000)
-    } finally {
-      setIsCallInitiating(false)
-    }
-  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()

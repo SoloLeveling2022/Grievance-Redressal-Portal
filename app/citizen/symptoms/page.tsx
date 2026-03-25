@@ -165,39 +165,6 @@ export default function FileComplaintPage() {
     setAttachments([])
   }
 
-  // Voice Agent trigger (same pattern used in follow-ups)
-  const handleVoiceAgent = async () => {
-    setIsCallInitiating(true)
-    setCallStatus("Initiating complaint filing voice agent...")
-    setCallError(null)
-    try {
-      const response = await fetch("https://api.bolna.ai/call", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer bn-06d2bf09278141bea83202353e9893f1`, // matches existing pattern
-        },
-        body: JSON.stringify({
-          agent_id: "654cc033-5853-4feb-b74a-6612fd95a9aa", // reuse follow-ups agent for consistency
-          recipient_phone_number: "+917981367685",
-        }),
-      })
-      const data = await response.json()
-      if (response.ok) {
-        setCallStatus("✅ Complaint voice agent initiated!")
-        setTimeout(() => setCallStatus(null), 5000)
-      } else {
-        setCallError(data.error || "Failed to initiate call")
-        setTimeout(() => setCallError(null), 5000)
-      }
-    } catch (err) {
-      setCallError("❌ Error connecting to voice AI service")
-      setTimeout(() => setCallError(null), 5000)
-    } finally {
-      setIsCallInitiating(false)
-    }
-  }
-
   return (
     <CitizenLayout>
       <div className="max-w-4xl mx-auto space-y-6">

@@ -37,7 +37,7 @@ export default function AuthPage() {
     if (userType === "citizen") {
       router.push("/citizen/dashboard");
     } else {
-      router.push("/pending/admin");
+      router.push("/officers/dashboard");
     }
   }
 

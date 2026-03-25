@@ -32,39 +32,6 @@ export default function RemindersPage() {
     }
   }, [])
 
-  const handleVoiceAgent = async () => {
-    setIsCallInitiating(true)
-    setCallStatus("Initiating updates voice agent...")
-    setCallError(null)
-
-    try {
-      const response = await fetch("https://api.bolna.ai/call", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer bn-06d2bf09278141bea83202353e9893f1`,
-        },
-        body: JSON.stringify({
-          agent_id: "8faa114d-a68c-47f6-b04e-1f80de67c20e",
-          recipient_phone_number: "+917981367685",
-        }),
-      })
-
-      const data = await response.json()
-      if (response.ok) {
-        setCallStatus("✅ Voice agent for updates initiated!")
-        setTimeout(() => setCallStatus(null), 7000)
-      } else {
-        setCallError(data.error || "Failed to initiate call")
-        setTimeout(() => setCallError(null), 7000)
-      }
-    } catch (err) {
-      setCallError("❌ Error connecting to voice AI service")
-      setTimeout(() => setCallError(null), 7000)
-    } finally {
-      setIsCallInitiating(false)
-    }
-  }
 
   const statusVariant = (status: Complaint["status"]) => {
     switch (status) {

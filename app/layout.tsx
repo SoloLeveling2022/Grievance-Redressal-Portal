@@ -8,6 +8,7 @@ import { PWAProvider } from "@/components/pwa/pwa-provider"
 import { PWAInstallBanner } from "@/components/pwa/pwa-install-banner"
 import { NotificationProvider } from "@/components/notifications/notification-provider"
 import { LanguageProvider } from "@/components/language/language-provider"
+import { Analytics } from "@vercel/analytics/next"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -45,6 +46,7 @@ export default function RootLayout({
               <NotificationProvider>
                 {children}
                 <Toaster />
+                <Analytics />
               </NotificationProvider>
             </PWAProvider>
           </LanguageProvider>

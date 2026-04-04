@@ -128,17 +128,9 @@ Terminal 1 (frontend):
 npm run dev
 ```
 
-Terminal 2 (backend):
-
-```bash
-cd backend
-python app.py
-```
-
 6. Open in browser:
 
 - Frontend: http://localhost:3000
-- Backend: http://localhost:5000
 
 ## Main User Roles
 

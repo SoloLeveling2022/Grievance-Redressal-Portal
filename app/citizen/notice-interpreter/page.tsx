@@ -129,7 +129,7 @@ export default function NoticeInterpreterPage() {
               <SelectContent>
                 <SelectItem value="en">English</SelectItem>
                 <SelectItem value="hi">Hindi</SelectItem>
-                <SelectItem value="te">Telugu</SelectItem>
+                {/* <SelectItem value="te">Telugu</SelectItem> */}
               </SelectContent>
             </Select>
           </div>
@@ -145,14 +145,14 @@ export default function NoticeInterpreterPage() {
 
           {ocrText ? (
             <div className="grid gap-2">
-              <Label>Extracted OCR Text</Label>
+              <Label>Extracted Text</Label>
               <Textarea value={ocrText} readOnly rows={6} />
             </div>
           ) : null}
 
           {resultText ? (
             <div className="grid gap-2">
-              <Label>Gemini Response</Label>
+              <Label>Voice Response</Label>
               <Textarea value={resultText} readOnly rows={6} />
               {warning ? <p className="text-sm text-amber-600 font-medium">{warning}</p> : null}
             </div>

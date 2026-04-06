@@ -24,30 +24,61 @@ This project provides a centralized digital portal where complaints can be submi
 
 ### Citizen Features
 
-- Register and log in securely.
-- Submit grievances with category and details.
-- Track complaint status in real time.
-- Access chat support and notifications.
-- Use health and assistance modules (symptom checker, reminders, follow-up tools).
+- Secure login/signup and role-based access.
+- Citizen dashboard with grievance overview, status tracking, and updates.
+- Grievance filing with category-based workflows and complaint progression visibility.
+- Citizen chat support and communication tools.
+- Appointment support and consultation flow.
+- Personal records and prescription access.
+- AI-powered health modules:
+	- Symptom analysis and guidance.
+	- AI prescriptions and diagnosis assistance.
+	- Health plan and recovery follow-up support.
+- Wellness and utility modules:
+	- Medication reminders.
+	- Post-operative follow-up.
+	- Goals tracking, workout, and recipe suggestions.
+	- Nearby hospitals lookup.
+	- Notice interpretation support.
+	- Face blur utility for privacy-sensitive media.
 
 ### Officer/Authority Features
 
-- View and manage assigned complaints.
-- Update complaint status and actions taken.
-- Review analytics and reports.
-- Coordinate with emergency and support teams.
+- Officer dashboard for monitoring assigned cases and citizen queues.
+- Complaint handling workflows for review, action updates, and status progression.
+- Accessed-records view for governance and accountability.
+- Officer chat and communication modules.
+- Appointment and patient-management interfaces.
+- Analytics dashboards and report views for operational insights.
 
-### Emergency and Support Features
+### Police and Emergency Features
 
-- SOS alert module for urgent situations.
-- Location-aware emergency coordination.
-- Basic medical support modules.
+- Police dashboard for urgent incident response.
+- Alert history tracking for emergency events.
+- Emergency alert components for rapid escalation.
+- Support for location-aware emergency coordination workflows.
 
-### Additional Modules
+### Admin and Review Features
 
-- Notice interpretation support.
-- Face blur utility for privacy-sensitive uploads.
-- Recipe, workout, and health-plan utilities (project extension modules).
+- Pending requests view for moderation/review flows.
+- Admin pending panel for approval and monitoring operations.
+
+### AI and API Features
+
+- Grievance categorization API.
+- Symptom analysis and voice-call support APIs.
+- Post-op follow-up and medication reminder voice-call APIs.
+- AI interpretation and recipe-generation APIs.
+- Patient APIs for chat, health plans, and records.
+- Appointment APIs for doctor-patient call workflows.
+- File processing and X-ray analysis endpoints.
+
+### Platform Features
+
+- Multilingual interface support.
+- Notification components for in-app updates.
+- PWA support with manifest and service worker for install/offline readiness.
+- Reusable component-driven UI architecture built with Next.js App Router.
 
 ## Technology Stack
 

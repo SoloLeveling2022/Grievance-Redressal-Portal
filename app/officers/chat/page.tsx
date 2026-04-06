@@ -12,6 +12,8 @@ import {
 } from "lucide-react"
 import { OfficersLayout } from "@/components/doctor/officer-layout"
 import { getSocket } from "@/lib/socket"
+import { useWebRtcCall } from "@/hooks/use-webrtc-call"
+import { WebRtcCallDialog } from "../../../components/common/webrtc-call-dialog"
 
 type AuthorityId = "police" | "municipal" | "health" | "traffic" | "revenue"
 
@@ -80,6 +82,27 @@ export default function GrievanceChat() {
   const [copyStatus, setCopyStatus] = useState("")
   const messagesEndRef = useRef<HTMLDivElement | null>(null)
   const typingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const {
+    isOpen: isCallDialogOpen,
+    callMode,
+    status: callStatus,
+    activePeerId,
+    localStream,
+    remoteStream,
+    error: callError,
+    isMuted,
+    isVideoEnabled,
+    isBlurEnabled,
+    canToggleBlur,
+    startCall,
+    endCall,
+    acceptIncomingCall,
+    rejectIncomingCall,
+    toggleMute,
+    toggleVideo,
+    toggleBlur,
+    onDialogOpenChange,
+  } = useWebRtcCall({ currentUserId: officerId })
 
   useEffect(() => {
     const storedOfficerId = (() => {
@@ -272,6 +295,16 @@ export default function GrievanceChat() {
     }
   }
 
+  const handleStartAudioCall = () => {
+    if (!selectedCitizen) return
+    startCall(selectedCitizen, "audio")
+  }
+
+  const handleStartVideoCall = () => {
+    if (!selectedCitizen) return
+    startCall(selectedCitizen, "video")
+  }
+
   const currentMessages = messages.filter(m => m.citizenId === selectedCitizen)
 
   return (
@@ -334,8 +367,8 @@ export default function GrievanceChat() {
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Button variant="outline" size="sm" className="hidden md:flex"><Phone className="h-4 w-4" /><span className="ml-1">Call</span></Button>
-                      <Button variant="outline" size="sm" className="hidden md:flex"><Video className="h-4 w-4" /><span className="ml-1">Video</span></Button>
+                      <Button variant="outline" size="sm" className="hidden md:flex" onClick={handleStartAudioCall} disabled={!selectedCitizen}><Phone className="h-4 w-4" /><span className="ml-1">Call</span></Button>
+                      <Button variant="outline" size="sm" className="hidden md:flex" onClick={handleStartVideoCall} disabled={!selectedCitizen}><Video className="h-4 w-4" /><span className="ml-1">Video</span></Button>
                     </div>
                   </div>
                   <div className="mt-3 p-3 bg-blue-50 rounded-lg">
@@ -434,6 +467,27 @@ export default function GrievanceChat() {
           </div>
         </div>
       </div>
+      <WebRtcCallDialog
+        open={isCallDialogOpen}
+        onOpenChange={onDialogOpenChange}
+        onEndCall={endCall}
+        onAccept={acceptIncomingCall}
+        onReject={rejectIncomingCall}
+        mode={callMode}
+        status={callStatus}
+        peerId={activePeerId}
+        localStream={localStream}
+        remoteStream={remoteStream}
+        error={callError}
+        peerLabel="Citizen"
+        isMuted={isMuted}
+        isVideoEnabled={isVideoEnabled}
+        onToggleMute={toggleMute}
+        onToggleVideo={toggleVideo}
+        canToggleBlur={canToggleBlur}
+        isBlurEnabled={isBlurEnabled}
+        onToggleBlur={toggleBlur}
+      />
     </OfficersLayout>
   )
 }

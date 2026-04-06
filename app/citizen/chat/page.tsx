@@ -13,6 +13,8 @@ import {
 } from "lucide-react"
 import { CitizenLayout } from "@/components/patient/patient-layout"
 import { getSocket } from "@/lib/socket"
+import { useWebRtcCall } from "@/hooks/use-webrtc-call"
+import { WebRtcCallDialog } from "../../../components/common/webrtc-call-dialog"
 
 type AuthorityId = "police" | "municipal" | "health" | "traffic" | "revenue"
 
@@ -68,6 +70,27 @@ export default function CitizenAuthorityChat() {
   const [pendingRecordsRequest, setPendingRecordsRequest] = useState<RecordsLinkRequestPayload | null>(null)
   const messagesEndRef = useRef<HTMLDivElement | null>(null)
   const typingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const {
+    isOpen: isCallDialogOpen,
+    callMode,
+    status: callStatus,
+    activePeerId,
+    localStream,
+    remoteStream,
+    error: callError,
+    isMuted,
+    isVideoEnabled,
+    isBlurEnabled,
+    canToggleBlur,
+    startCall,
+    endCall,
+    acceptIncomingCall,
+    rejectIncomingCall,
+    toggleMute,
+    toggleVideo,
+    toggleBlur,
+    onDialogOpenChange,
+  } = useWebRtcCall({ currentUserId: citizenId, enableFaceBlurControl: true })
 
   useEffect(() => {
     const id = `CIT-${Math.random().toString(36).substr(2, 6).toUpperCase()}`
@@ -156,6 +179,16 @@ export default function CitizenAuthorityChat() {
     })
     window.open(pendingRecordsRequest.link, "_blank")
     setPendingRecordsRequest(null)
+  }
+
+  const handleStartAudioCall = () => {
+    if (!officerOnline || !primaryOfficerContact || primaryOfficerContact === "Not connected") return
+    startCall(primaryOfficerContact, "audio")
+  }
+
+  const handleStartVideoCall = () => {
+    if (!officerOnline || !primaryOfficerContact || primaryOfficerContact === "Not connected") return
+    startCall(primaryOfficerContact, "video")
   }
 
   const currentAuthority = AUTHORITIES.find(a => a.id === selectedAuthority)!
@@ -252,8 +285,8 @@ export default function CitizenAuthorityChat() {
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Button variant="outline" size="sm" className="hidden md:flex"><Phone className="h-4 w-4" /><span className="ml-1">Call</span></Button>
-                      <Button variant="outline" size="sm" className="hidden md:flex"><Video className="h-4 w-4" /><span className="ml-1">Video</span></Button>
+                      <Button variant="outline" size="sm" className="hidden md:flex" onClick={handleStartAudioCall} disabled={!officerOnline || primaryOfficerContact === "Not connected"}><Phone className="h-4 w-4" /><span className="ml-1">Call</span></Button>
+                      <Button variant="outline" size="sm" className="hidden md:flex" onClick={handleStartVideoCall} disabled={!officerOnline || primaryOfficerContact === "Not connected"}><Video className="h-4 w-4" /><span className="ml-1">Video</span></Button>
                     </div>
                   </div>
                   <div className="mt-3 p-3 bg-blue-50 rounded-lg">
@@ -358,6 +391,28 @@ export default function CitizenAuthorityChat() {
           </div>
         </div>
       </div>
+      <WebRtcCallDialog
+        open={isCallDialogOpen}
+        onOpenChange={onDialogOpenChange}
+        onEndCall={endCall}
+        onAccept={acceptIncomingCall}
+        onReject={rejectIncomingCall}
+        mode={callMode}
+        status={callStatus}
+        peerId={activePeerId}
+        localStream={localStream}
+        remoteStream={remoteStream}
+        error={callError}
+        audioInitialOnly
+        peerLabel="Officer"
+        isMuted={isMuted}
+        isVideoEnabled={isVideoEnabled}
+        onToggleMute={toggleMute}
+        onToggleVideo={toggleVideo}
+        canToggleBlur={canToggleBlur}
+        isBlurEnabled={isBlurEnabled}
+        onToggleBlur={toggleBlur}
+      />
     </CitizenLayout>
   )
 }

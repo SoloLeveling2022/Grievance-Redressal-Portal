@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react"
 import { Button } from "@/components/ui/button"
-import { Home, Users, Calendar, MessageSquare, FileText, LogOut, Activity, Menu, X } from "lucide-react"
+import { Home, Users, Calendar, MessageSquare, FileText, LogOut, Activity, Menu, X, Users2Icon } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useLanguage } from "@/components/language/language-provider"
@@ -24,6 +24,7 @@ export function OfficersLayout({ children }: officersLayoutProps) {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false)
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [currentOfficerId, setCurrentOfficerId] = useState("")
 
   // Check if mobile on mount and resize
   useEffect(() => {
@@ -35,6 +36,44 @@ export function OfficersLayout({ children }: officersLayoutProps) {
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
+
+  useEffect(() => {
+    const syncOfficerId = () => {
+      try {
+        const officerId = localStorage.getItem("careconnect_current_officer_id") || ""
+        setCurrentOfficerId(officerId)
+      } catch {
+        setCurrentOfficerId("")
+      }
+    }
+
+    const onOfficerIdUpdated = (event: Event) => {
+      const customEvent = event as CustomEvent<{ officerId?: string }>
+      const officerId = customEvent.detail?.officerId || ""
+      if (officerId) {
+        setCurrentOfficerId(officerId)
+      } else {
+        syncOfficerId()
+      }
+    }
+
+    const onStorage = (event: StorageEvent) => {
+      if (event.key === "careconnect_current_officer_id") {
+        setCurrentOfficerId(event.newValue || "")
+      }
+    }
+
+    syncOfficerId()
+    window.addEventListener("careconnect-officer-id-updated", onOfficerIdUpdated as EventListener)
+    window.addEventListener("storage", onStorage)
+    window.addEventListener("focus", syncOfficerId)
+
+    return () => {
+      window.removeEventListener("careconnect-officer-id-updated", onOfficerIdUpdated as EventListener)
+      window.removeEventListener("storage", onStorage)
+      window.removeEventListener("focus", syncOfficerId)
+    }
+  }, [pathname])
 
   // Ensure we're in officers context
   useEffect(() => {
@@ -49,6 +88,7 @@ export function OfficersLayout({ children }: officersLayoutProps) {
     // { name: t("citizens"), href: "/officers/citizens", icon: Users },
     // { name: t("appointments"), href: "/officers/appointments", icon: Calendar },
     { name: t("chat"), href: "/officers/chat", icon: MessageSquare },
+    { name: "Accessed Records", href: "/officers/accessedRecords", icon: Users2Icon },
     { name: t("reports"), href: "/officers/reports", icon: FileText },
     { name: t("analytics"), href: "/officers/analytics", icon: Activity },
   ]
@@ -64,6 +104,13 @@ export function OfficersLayout({ children }: officersLayoutProps) {
     if (isMobile) {
       setIsMobileSidebarOpen(false)
     }
+  }
+
+  const getNavigationHref = (href: string) => {
+    if (href === "/officers/accessedRecords" && currentOfficerId) {
+      return `${href}?shareToOfficer=${encodeURIComponent(currentOfficerId)}`
+    }
+    return href
   }
 
   return (
@@ -136,7 +183,7 @@ export function OfficersLayout({ children }: officersLayoutProps) {
             {navigation.map((item) => {
               const isActive = pathname === item.href
               return (
-                <Link key={item.name} href={item.href} onClick={handleNavigationClick}>
+                <Link key={item.name} href={getNavigationHref(item.href)} onClick={handleNavigationClick}>
                   <Button
                     variant={isActive ? "default" : "ghost"}
                     className={`w-full transition-all duration-300 ${

@@ -3,6 +3,7 @@
 import type React from "react"
 
 import { useState, useEffect, useRef } from "react"
+import { useSearchParams } from "next/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -25,6 +26,7 @@ import { Textarea } from "@/components/ui/textarea"
 import jsPDF from "jspdf"
 import ReactMarkdown from "react-markdown"
 import { CheckCircle } from "lucide-react"
+import { getSocket } from "@/lib/socket"
 
 const PINATA_JWT = process.env.NEXT_PUBLIC_PINATA_JWT
 const PINATA_GATEWAY = process.env.NEXT_PUBLIC_PINATA_GATEWAY_URL || "https://gateway.pinata.cloud/ipfs/"
@@ -85,10 +87,18 @@ function mapRecordTypeToList(type: string) {
 
 export default function citizenRecords() {
   const { t } = useLanguage()
+  const searchParams = useSearchParams()
+  const shareToOfficer = searchParams.get("shareToOfficer") || ""
+  const shareCitizenId = searchParams.get("citizenId") || ""
+  const isShareMode = Boolean(shareToOfficer && shareCitizenId)
+
   const [searchTerm, setSearchTerm] = useState("")
   const [filterType, setFilterType] = useState("all")
   const [currentPage, setCurrentPage] = useState(1)
   const recordsPerPage = 5
+  const [selectedRecordIds, setSelectedRecordIds] = useState<string[]>([])
+  const [isSharingRecords, setIsSharingRecords] = useState(false)
+  const [shareStatus, setShareStatus] = useState("")
 
   const [showUploadModal, setShowUploadModal] = useState(false)
   const [uploadedEHRFiles, setUploadedEHRFiles] = useState<File[]>([])
@@ -324,6 +334,84 @@ export default function citizenRecords() {
     }
   }
 
+  const extractShareableLinks = (record: any): string[] => {
+    if (!record?.files || !Array.isArray(record.files)) return []
+    return record.files
+      .map((file: any) => file?.url)
+      .filter((url: string | null | undefined) => Boolean(url)) as string[]
+  }
+
+  const buildShareableContent = (record: any): any => {
+    if (record?.response?.diagnosis) {
+      return {
+        diagnosis: record.response.diagnosis,
+        source: record.source,
+      }
+    }
+    if (record?.response?.gemini) {
+      return {
+        scanAnalysis: record.response.gemini,
+        source: record.source,
+      }
+    }
+    return {
+      summary: record?.description || "No description",
+      raw: record,
+    }
+  }
+
+  const toggleRecordSelection = (recordId: string) => {
+    setSelectedRecordIds((prev) =>
+      prev.includes(recordId) ? prev.filter((id) => id !== recordId) : [...prev, recordId],
+    )
+  }
+
+  const handleShareSelectedRecords = () => {
+    if (!isShareMode || selectedRecordIds.length === 0) return
+
+    const selectedRecords = records.filter((record) => selectedRecordIds.includes(record.id))
+    const selectedPayload = selectedRecords.map((record) => ({
+      recordId: record.id,
+      title: record.title,
+      type: record.type,
+      date: record.date,
+      description: record.description,
+      links: extractShareableLinks(record),
+      content: buildShareableContent(record),
+      shareToOfficer,
+    }))
+
+    setIsSharingRecords(true)
+
+    try {
+      const existing = JSON.parse(localStorage.getItem("careconnect_shared_records") || "[]")
+      const withMeta = selectedPayload.map((record) => ({
+        ...record,
+        citizenId: shareCitizenId,
+        sharedAt: new Date().toISOString(),
+      }))
+      localStorage.setItem(
+        "careconnect_shared_records",
+        JSON.stringify([...(Array.isArray(existing) ? existing : []), ...withMeta]),
+      )
+    } catch (error) {
+      console.error("[RecordsFlow] Failed to persist local shared records", error)
+    }
+
+    const socket = getSocket()
+    socket.emit("share_selected_records", {
+      officerId: shareToOfficer,
+      citizenId: shareCitizenId,
+      sharedAt: new Date().toISOString(),
+      records: selectedPayload,
+    })
+    const totalLinks = selectedPayload.reduce((acc, rec) => acc + rec.links.length, 0)
+    setShareStatus(
+      `Shared ${selectedPayload.length} record(s) with officer ${shareToOfficer} (${totalLinks} file link(s) attached).`,
+    )
+    setIsSharingRecords(false)
+  }
+
   // PDF download logic (from symptoms page)
   function downloadDiagnosisPDF(record: any) {
     const diagnosis = record.response?.diagnosis || record.response?.diagnosis || record.diagnosis || record
@@ -502,6 +590,29 @@ export default function citizenRecords() {
   return (
     <CitizenLayout>
       <div className="space-y-6">
+        {isShareMode && (
+          <Card className="border-emerald-200 bg-emerald-50">
+            <CardContent className="pt-6">
+              <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <h2 className="text-lg font-semibold text-emerald-900">Records Sharing Mode</h2>
+                  <p className="text-sm text-emerald-800">
+                    Select records below, then click share to send links to officer {shareToOfficer}.
+                  </p>
+                </div>
+                <Button
+                  onClick={handleShareSelectedRecords}
+                  disabled={selectedRecordIds.length === 0 || isSharingRecords}
+                  className="bg-emerald-600 hover:bg-emerald-700"
+                >
+                  {isSharingRecords ? "Sharing..." : `Share Selected (${selectedRecordIds.length})`}
+                </Button>
+              </div>
+              {shareStatus && <p className="mt-2 text-xs text-emerald-900">{shareStatus}</p>}
+            </CardContent>
+          </Card>
+        )}
+
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{t("medicalRecords")}</h1>
           <p className="text-gray-600 dark:text-gray-300 mt-2">{t("medicalRecordsDesc")}</p>
@@ -697,6 +808,16 @@ export default function citizenRecords() {
                 <CardContent className="pt-6">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start space-x-4 flex-1">
+                      {isShareMode && (
+                        <div className="pt-1">
+                          <input
+                            type="checkbox"
+                            checked={selectedRecordIds.includes(record.id)}
+                            onChange={() => toggleRecordSelection(record.id)}
+                            aria-label={`Select ${record.title}`}
+                          />
+                        </div>
+                      )}
                       <div className={`p-2 rounded-lg ${getRecordColor(record.type)}`}>
                         {getRecordIcon(record.type)}
                       </div>
@@ -738,7 +859,14 @@ export default function citizenRecords() {
                         <Eye className="h-4 w-4 mr-2" />
                         {t("view")}
                       </Button>
-                      <Button variant="outline" size="sm" onClick={() => window.open(record.files[0].url)}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const firstUrl = extractShareableLinks(record)[0]
+                          if (firstUrl) window.open(firstUrl)
+                        }}
+                      >
                         <Download className="h-4 w-4 mr-2" />
                         {t("download")}
                       </Button>

@@ -30,6 +30,14 @@ type PresenceOfficer = {
   id: string
 }
 
+type RecordsLinkRequestPayload = {
+  officerId: string
+  citizenId: string
+  authority?: AuthorityId
+  link: string
+  requestedAt: string
+}
+
 type Authority = {
   id: AuthorityId
   name: string
@@ -57,6 +65,7 @@ export default function CitizenAuthorityChat() {
   const [officerContacts, setOfficerContacts] = useState<PresenceOfficer[]>([])
   const [socketConnected, setSocketConnected] = useState(false)
   const [citizenId, setCitizenId] = useState("")
+  const [pendingRecordsRequest, setPendingRecordsRequest] = useState<RecordsLinkRequestPayload | null>(null)
   const messagesEndRef = useRef<HTMLDivElement | null>(null)
   const typingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -76,11 +85,17 @@ export default function CitizenAuthorityChat() {
       if (fromRole === "officer") setOfficerTyping(isTyping)
     }
 
+    const onRecordsLinkRequest = (payload: RecordsLinkRequestPayload) => {
+      if (payload.citizenId !== id) return
+      setPendingRecordsRequest(payload)
+    }
+
     socket.on("connect", onConnect)
     socket.on("disconnect", onDisconnect)
     socket.on("presence", onPresence)
     socket.on("new_message", onNewMessage)
     socket.on("typing", onTyping)
+    socket.on("records_link_request", onRecordsLinkRequest)
     if (socket.connected) onConnect()
 
     return () => {
@@ -89,6 +104,7 @@ export default function CitizenAuthorityChat() {
       socket.off("presence", onPresence)
       socket.off("new_message", onNewMessage)
       socket.off("typing", onTyping)
+      socket.off("records_link_request", onRecordsLinkRequest)
     }
   }, [])
 
@@ -127,6 +143,19 @@ export default function CitizenAuthorityChat() {
 
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSendMessage() }
+  }
+
+  const handleApproveRecordsRequest = () => {
+    if (!pendingRecordsRequest || !citizenId) return
+    const socket = getSocket()
+    socket.emit("approve_records_link", {
+      officerId: pendingRecordsRequest.officerId,
+      citizenId,
+      link: pendingRecordsRequest.link,
+      approvedAt: new Date().toISOString(),
+    })
+    window.open(pendingRecordsRequest.link, "_blank")
+    setPendingRecordsRequest(null)
   }
 
   const currentAuthority = AUTHORITIES.find(a => a.id === selectedAuthority)!
@@ -288,6 +317,22 @@ export default function CitizenAuthorityChat() {
                   <div ref={messagesEndRef} />
                 </CardContent>
                 <div className="border-t bg-gray-50 p-4">
+                  {pendingRecordsRequest && (
+                    <div className="mb-3 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
+                      Officer {pendingRecordsRequest.officerId} requested your records link.
+                      <div className="mt-1 text-xs text-emerald-700">
+                        Requested at: {new Date(pendingRecordsRequest.requestedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                      </div>
+                      <div className="mt-2 flex flex-wrap items-center gap-2">
+                        <Button size="sm" onClick={handleApproveRecordsRequest}>
+                          Open and Share Records Link
+                        </Button>
+                        <Button size="sm" variant="outline" onClick={() => setPendingRecordsRequest(null)}>
+                          Dismiss
+                        </Button>
+                      </div>
+                    </div>
+                  )}
                   <div className="flex items-center space-x-3">
                     <Button variant="outline" size="sm" className="shrink-0"><Paperclip className="h-4 w-4" /></Button>
                     <Input value={newMessage} onChange={handleInputChange} onKeyPress={handleKeyPress} placeholder={`Send anonymous message to ${currentAuthority.name}...`} className="bg-white" />

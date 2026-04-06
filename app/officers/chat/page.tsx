@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import {
-  Send, User, Paperclip, Mic, Shield, Phone, Video,
+  Send, User, Link2, Mic, Shield, Phone, Video,
 } from "lucide-react"
 import { OfficersLayout } from "@/components/doctor/officer-layout"
 import { getSocket } from "@/lib/socket"
@@ -30,6 +30,34 @@ type PresenceCitizen = {
   authority: AuthorityId | null
 }
 
+type RecordsLinkReadyPayload = {
+  citizenId: string
+  officerId: string
+  link: string
+  approvedAt: string
+}
+
+type RecordsLinkRequestStatusPayload = {
+  ok: boolean
+  citizenId: string
+  reason?: string
+}
+
+type CitizenSharedRecordsPayload = {
+  citizenId: string
+  officerId: string
+  sharedAt: string
+  accessLink?: string
+  records: Array<{
+    recordId: string
+    title: string
+    type: string
+    date?: string
+    description?: string
+    links: string[]
+  }>
+}
+
 const AUTHORITY_LABELS: Record<AuthorityId, string> = {
   police: "Police",
   municipal: "Municipal",
@@ -46,12 +74,27 @@ export default function GrievanceChat() {
   const [citizenTyping, setCitizenTyping] = useState(false)
   const [officerId, setOfficerId] = useState("")
   const [connected, setConnected] = useState(false)
+  const [lastRecordLink, setLastRecordLink] = useState("")
+  const [recordRequestStatus, setRecordRequestStatus] = useState("")
+  const [accessedRecordsLink, setAccessedRecordsLink] = useState("")
+  const [copyStatus, setCopyStatus] = useState("")
   const messagesEndRef = useRef<HTMLDivElement | null>(null)
   const typingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
-    const id = `OFFICER-${Math.random().toString(36).substr(2, 6).toUpperCase()}`
+    const storedOfficerId = (() => {
+      try {
+        return localStorage.getItem("careconnect_current_officer_id") || ""
+      } catch {
+        return ""
+      }
+    })()
+    const id = storedOfficerId || `OFFICER-${Math.random().toString(36).substr(2, 6).toUpperCase()}`
     setOfficerId(id)
+    try {
+      localStorage.setItem("careconnect_current_officer_id", id)
+      window.dispatchEvent(new CustomEvent("careconnect-officer-id-updated", { detail: { officerId: id } }))
+    } catch {}
     const socket = getSocket()
 
     const onConnect = () => {
@@ -83,11 +126,61 @@ export default function GrievanceChat() {
       if (fromRole === "citizen") setCitizenTyping(isTyping)
     }
 
+    const onRecordsLinkReady = (payload: RecordsLinkReadyPayload) => {
+      if (payload.officerId !== id) return
+      setLastRecordLink(payload.link)
+      setRecordRequestStatus(`Approved by ${payload.citizenId}`)
+      setMessages(prev => [
+        ...prev,
+        {
+          id: `${Date.now()}-records-link`,
+          content: `Records access approved by ${payload.citizenId}. Open: ${payload.link}`,
+          sender: "authority",
+          citizenId: payload.citizenId,
+          authority: "health",
+          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          type: "text",
+        },
+      ])
+    }
+
+    const onRecordsLinkRequestStatus = (payload: RecordsLinkRequestStatusPayload) => {
+      if (payload.ok) {
+        setRecordRequestStatus(`Request sent to ${payload.citizenId}`)
+      } else {
+        setRecordRequestStatus(payload.reason || `Failed to send request to ${payload.citizenId}`)
+      }
+    }
+
+    const onCitizenSharedRecords = (payload: CitizenSharedRecordsPayload) => {
+      if (payload.officerId !== id) return
+      const totalLinks = payload.records.reduce((acc, rec) => acc + (Array.isArray(rec.links) ? rec.links.length : 0), 0)
+      const firstLink = payload.records.find((rec) => rec.links?.[0])?.links?.[0] || ""
+      const finalAccessLink = payload.accessLink || `${window.location.origin}/officers/accessedRecords?shareToOfficer=${encodeURIComponent(payload.officerId)}`
+      setAccessedRecordsLink(finalAccessLink)
+      setMessages(prev => [
+        ...prev,
+        {
+          id: `${Date.now()}-records-shared`,
+          content: `Citizen shared ${payload.records.length} record(s) (${totalLinks} file link(s)). Open list: ${finalAccessLink} ${firstLink ? `| First link: ${firstLink}` : ""}`,
+          sender: "authority",
+          citizenId: payload.citizenId,
+          authority: "health",
+          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          type: "text",
+        },
+      ])
+      setRecordRequestStatus(`Received ${payload.records.length} shared record(s) from ${payload.citizenId}`)
+    }
+
     socket.on("connect", onConnect)
     socket.on("disconnect", onDisconnect)
     socket.on("presence", onPresence)
     socket.on("new_message", onNewMessage)
     socket.on("typing", onTyping)
+    socket.on("records_link_ready", onRecordsLinkReady)
+    socket.on("records_link_request_status", onRecordsLinkRequestStatus)
+    socket.on("citizen_records_shared", onCitizenSharedRecords)
 
     if (socket.connected) onConnect()
 
@@ -97,8 +190,18 @@ export default function GrievanceChat() {
       socket.off("presence", onPresence)
       socket.off("new_message", onNewMessage)
       socket.off("typing", onTyping)
+      socket.off("records_link_ready", onRecordsLinkReady)
+      socket.off("records_link_request_status", onRecordsLinkRequestStatus)
+      socket.off("citizen_records_shared", onCitizenSharedRecords)
     }
-  }, [selectedCitizen])
+  }, [])
+
+  useEffect(() => {
+    if (!selectedCitizen) return
+    if (!citizensOnline.some(c => c.id === selectedCitizen)) {
+      setSelectedCitizen(citizensOnline[0]?.id || "")
+    }
+  }, [citizensOnline, selectedCitizen])
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -139,6 +242,33 @@ export default function GrievanceChat() {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault()
       handleSendMessage()
+    }
+  }
+
+  const handleRequestRecordsLink = () => {
+    if (!selectedCitizen || !officerId) return
+    const citizen = citizensOnline.find(c => c.id === selectedCitizen)
+    const authority = (citizen?.authority || "health") as AuthorityId
+    const link = `${window.location.origin}/citizen/records?citizenId=${encodeURIComponent(selectedCitizen)}&shareToOfficer=${encodeURIComponent(officerId)}&source=officer-chat`
+    const socket = getSocket()
+    socket.emit("request_records_link", {
+      officerId,
+      citizenId: selectedCitizen,
+      authority,
+      link,
+      requestedAt: new Date().toISOString(),
+    })
+    setLastRecordLink(link)
+  }
+
+  const handleCopyAccessLink = async () => {
+    if (!accessedRecordsLink) return
+    try {
+      await navigator.clipboard.writeText(accessedRecordsLink)
+      setCopyStatus("Copied")
+      setTimeout(() => setCopyStatus(""), 1500)
+    } catch {
+      setCopyStatus("Copy failed")
     }
   }
 
@@ -210,6 +340,17 @@ export default function GrievanceChat() {
                   </div>
                   <div className="mt-3 p-3 bg-blue-50 rounded-lg">
                     <p className="text-sm text-blue-700"><Shield className="h-4 w-4 inline mr-1" />Citizen identity is protected. Live synchronized messaging enabled.</p>
+                    {accessedRecordsLink && (
+                      <div className="mt-2 flex flex-wrap items-center gap-2">
+                        <Button size="sm" onClick={() => window.open(accessedRecordsLink, "_blank")}>
+                          View Accessed Records
+                        </Button>
+                        <Button size="sm" variant="outline" onClick={handleCopyAccessLink}>
+                          Copy Link
+                        </Button>
+                        {copyStatus && <span className="text-xs text-blue-700">{copyStatus}</span>}
+                      </div>
+                    )}
                   </div>
                 </CardHeader>
               </Card>
@@ -266,7 +407,9 @@ export default function GrievanceChat() {
 
                 <div className="border-t bg-gray-50 p-4">
                   <div className="flex items-center space-x-3">
-                    <Button variant="outline" size="sm" className="shrink-0"><Paperclip className="h-4 w-4" /></Button>
+                    <Button variant="outline" size="sm" className="shrink-0" onClick={handleRequestRecordsLink} disabled={!selectedCitizen || !officerId}>
+                      <Link2 className="h-4 w-4" />
+                    </Button>
                     <Input value={newMessage} onChange={handleInputChange} onKeyPress={handleKeyPress} placeholder={selectedCitizen ? `Respond to ${selectedCitizen}...` : "Select a citizen first"} className="bg-white" disabled={!selectedCitizen} />
                     <Select defaultValue="response">
                       <SelectTrigger className="w-32 bg-white"><SelectValue /></SelectTrigger>
@@ -280,6 +423,11 @@ export default function GrievanceChat() {
                     <Button variant="outline" size="sm" className="shrink-0"><Mic className="h-4 w-4" /></Button>
                     <Button onClick={handleSendMessage} disabled={!newMessage.trim() || !selectedCitizen} className="shrink-0 bg-blue-500 hover:bg-blue-600"><Send className="h-4 w-4" /></Button>
                   </div>
+                  {lastRecordLink && selectedCitizen && (
+                    <div className="mt-2 rounded-md border border-blue-200 bg-blue-50 px-3 py-2 text-xs text-blue-800">
+                      Requested records link for {selectedCitizen}. {recordRequestStatus || "Awaiting citizen approval."}
+                    </div>
+                  )}
                 </div>
               </Card>
             </div>

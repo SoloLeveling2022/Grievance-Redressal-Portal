@@ -8,7 +8,11 @@ let socket: Socket | null = null
  */
 export function getSocket(): Socket {
   if (!socket) {
-    socket = io({ path: '/socket.io' })
+    const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL?.trim()
+    socket = io(socketUrl || undefined, {
+      path: '/socket.io',
+      transports: ['websocket', 'polling'],
+    })
   }
   return socket
 }

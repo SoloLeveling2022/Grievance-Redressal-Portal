@@ -149,6 +149,9 @@ cd ..
 GEMINI_API_KEY=your_gemini_api_key
 PY_BACKEND_URL=http://localhost:5000
 VOICE_API_KEY=your_voice_api_key
+NEXT_PUBLIC_SOCKET_URL=http://localhost:3000
+APP_BASE_URL=http://localhost:3000
+SOCKET_CORS_ORIGIN=http://localhost:3000
 ```
 
 5. Run the project:
@@ -162,6 +165,13 @@ npm run dev
 6. Open in browser:
 
 - Frontend: http://localhost:3000
+
+### Deployment Notes (WebSocket)
+
+- This project uses Socket.IO via the custom Node server (`server.js`), so deployment must run that server process.
+- Set `NEXT_PUBLIC_SOCKET_URL` to your public realtime server URL (example: `https://your-app.example.com`).
+- Set `APP_BASE_URL` to the public app URL so generated links use production domain instead of localhost.
+- Set `SOCKET_CORS_ORIGIN` to your frontend origin. For multiple origins, use comma-separated values.
 
 ## Main User Roles
 

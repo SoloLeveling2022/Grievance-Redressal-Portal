@@ -9,6 +9,9 @@ const port = parseInt(process.env.PORT || '3000', 10)
 const app = next({ dev })
 const handle = app.getRequestHandler()
 
+const appBaseUrl = (process.env.APP_BASE_URL || `http://localhost:${port}`).replace(/\/+$/, '')
+const socketCorsOrigin = process.env.SOCKET_CORS_ORIGIN || '*'
+
 /**
  * In-memory registry of connected clients.
  * Key = socket.id, Value = { role, id, authority }
@@ -46,7 +49,7 @@ app.prepare().then(() => {
   })
 
   const io = new Server(httpServer, {
-    cors: { origin: '*' },
+    cors: { origin: socketCorsOrigin === '*' ? '*' : socketCorsOrigin.split(',').map((origin) => origin.trim()) },
   })
 
   io.on('connection', (socket) => {
@@ -145,7 +148,7 @@ app.prepare().then(() => {
       const totalLinks = safeRecords.reduce((acc, rec) => acc + (Array.isArray(rec.links) ? rec.links.length : 0), 0)
       console.log(`[RecordsFlow] selected_share citizen=${citizenId} officer=${officerId} records=${safeRecords.length} links=${totalLinks}`)
       const officerSocketIds = findSocketIdsByClient('officer', officerId)
-      const accessLink = `http://localhost:${port}/officers/accessedRecords?shareToOfficer=${encodeURIComponent(officerId)}`
+      const accessLink = `${appBaseUrl}/officers/accessedRecords?shareToOfficer=${encodeURIComponent(officerId)}`
 
       const existing = sharedRecordsByOfficer.get(officerId) || []
       const payloadWithMeta = safeRecords.map((record) => ({
@@ -201,6 +204,6 @@ app.prepare().then(() => {
   })
 
   httpServer.listen(port, () => {
-    console.log(`> Ready on http://localhost:${port}`)
+    console.log(`> Ready on ${appBaseUrl}`)
   })
 })

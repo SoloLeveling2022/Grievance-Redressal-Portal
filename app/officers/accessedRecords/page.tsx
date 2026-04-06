@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { Suspense, useEffect, useMemo, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import { OfficersLayout } from "@/components/doctor/officer-layout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -22,6 +22,26 @@ type SharedRecord = {
 }
 
 export default function AccessedRecordsPage() {
+  return (
+    <Suspense fallback={<AccessedRecordsFallback />}>
+      <AccessedRecordsContent />
+    </Suspense>
+  )
+}
+
+function AccessedRecordsFallback() {
+  return (
+    <OfficersLayout>
+      <div className="space-y-6">
+        <Card>
+          <CardContent className="pt-6 text-sm text-gray-600">Loading shared records...</CardContent>
+        </Card>
+      </div>
+    </OfficersLayout>
+  )
+}
+
+function AccessedRecordsContent() {
   const searchParams = useSearchParams()
   const shareToOfficerParam = searchParams.get("shareToOfficer") || ""
   const [shareToOfficer, setShareToOfficer] = useState(shareToOfficerParam)

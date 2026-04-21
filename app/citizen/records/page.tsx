@@ -27,8 +27,7 @@ import jsPDF from "jspdf"
 import ReactMarkdown from "react-markdown"
 import { CheckCircle } from "lucide-react"
 import { getSocket } from "@/lib/socket"
-import { downloadBlockchainAuditLogsPdf, getBlockchainAuditLogs } from "@/utils/token-gated-records"
-import { logAccessControlAuditEvent } from "@/utils/token-gated-records"
+import { downloadBlockchainAuditLogsPdf, getBlockchainAuditLogs, logAccessControlAuditEvent } from "@/utils/token-gated-records/audit"
 
 const PINATA_JWT = process.env.NEXT_PUBLIC_PINATA_JWT
 const PINATA_GATEWAY = process.env.NEXT_PUBLIC_PINATA_GATEWAY_URL || "https://gateway.pinata.cloud/ipfs/"
@@ -130,7 +129,7 @@ export default function citizenRecords() {
     async function fetchDiagnosisRecords() {
       setLoadingDiagnosisRecords(true)
       try {
-        const res = await fetch("/api/citizen/records")
+        const res = await fetch("/api/patient/records")
         const data = await res.json()
         const localRecords = getLocalRecords()
         setDiagnosisRecords([...(localRecords || []), ...(data.records || [])])

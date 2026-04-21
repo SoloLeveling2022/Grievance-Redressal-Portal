@@ -2,6 +2,28 @@ export type Address = `0x${string}`
 
 export type RecordId = bigint
 
+export type BlockchainAuditDirection = "read" | "write"
+
+export type BlockchainAuditStatus = "success" | "error"
+
+export type BlockchainAuditEntry = {
+  id: string
+  timestampIso: string
+  contractAddress: Address
+  chainId?: number | string
+  networkName?: string
+  direction: BlockchainAuditDirection
+  functionName: string
+  args: unknown[]
+  status: BlockchainAuditStatus
+  txHash?: `0x${string}`
+  result?: unknown
+  error?: string
+  footprint: Record<string, unknown>
+}
+
+export type BlockchainAuditLogger = (entry: BlockchainAuditEntry) => void | Promise<void>
+
 export type EncryptedPayload = {
   cipherTextBase64: string
   ivBase64: string
@@ -32,4 +54,7 @@ export type TokenGatedClientConfig = {
   contractAddress: Address
   read: ChainReadAdapter
   write: ChainWriteAdapter
+  chainId?: number | string
+  networkName?: string
+  auditLogger?: BlockchainAuditLogger
 }

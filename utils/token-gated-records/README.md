@@ -86,6 +86,23 @@ const client = createTokenGatedRecordsClient({
 })
 ```
 
+To capture full blockchain footprints (timestamp, function, args, tx hash, result/error) for PDF export:
+
+```ts
+import { createBrowserAuditLogger } from "@/utils/token-gated-records"
+
+const client = createTokenGatedRecordsClient({
+  contractAddress: "0x...",
+  chainId: 80002,
+  networkName: "Polygon Amoy",
+  read: yourReadAdapter,
+  write: yourWriteAdapter,
+  auditLogger: createBrowserAuditLogger({ module: "token-gated-records" }),
+})
+```
+
+The records UI can export these logs to PDF using `downloadBlockchainAuditLogsPdf()`.
+
 ## Citizen Side Integration (Step by Step)
 
 Suggested page: `app/citizen/records/page.tsx`

@@ -13,6 +13,7 @@ import {
 } from "lucide-react"
 import { CitizenLayout } from "@/components/patient/patient-layout"
 import { getSocket } from "@/lib/socket"
+import { logAccessControlAuditEvent } from "@/utils/token-gated-records"
 import { useWebRtcCall } from "@/hooks/use-webrtc-call"
 import { WebRtcCallDialog } from "../../../components/common/webrtc-call-dialog"
 
@@ -111,6 +112,20 @@ export default function CitizenAuthorityChat() {
     const onRecordsLinkRequest = (payload: RecordsLinkRequestPayload) => {
       if (payload.citizenId !== id) return
       setPendingRecordsRequest(payload)
+      logAccessControlAuditEvent({
+        action: "records_link_request_received",
+        status: "success",
+        actorRole: "citizen",
+        actorId: id,
+        citizenId: id,
+        officerId: payload.officerId,
+        authority: payload.authority,
+        direction: "read",
+        details: {
+          requestedAt: payload.requestedAt,
+          link: payload.link,
+        },
+      })
     }
 
     socket.on("connect", onConnect)
@@ -171,13 +186,62 @@ export default function CitizenAuthorityChat() {
   const handleApproveRecordsRequest = () => {
     if (!pendingRecordsRequest || !citizenId) return
     const socket = getSocket()
+    const approvedAt = new Date().toISOString()
     socket.emit("approve_records_link", {
       officerId: pendingRecordsRequest.officerId,
       citizenId,
       link: pendingRecordsRequest.link,
-      approvedAt: new Date().toISOString(),
+      approvedAt,
+    })
+    logAccessControlAuditEvent({
+      action: "records_link_request_approved",
+      status: "success",
+      actorRole: "citizen",
+      actorId: citizenId,
+      citizenId,
+      officerId: pendingRecordsRequest.officerId,
+      authority: pendingRecordsRequest.authority,
+      details: {
+        requestedAt: pendingRecordsRequest.requestedAt,
+        approvedAt,
+        link: pendingRecordsRequest.link,
+      },
     })
     window.open(pendingRecordsRequest.link, "_blank")
+    logAccessControlAuditEvent({
+      action: "records_link_opened_by_citizen",
+      status: "success",
+      actorRole: "citizen",
+      actorId: citizenId,
+      citizenId,
+      officerId: pendingRecordsRequest.officerId,
+      authority: pendingRecordsRequest.authority,
+      details: {
+        link: pendingRecordsRequest.link,
+      },
+    })
+    setPendingRecordsRequest(null)
+  }
+
+  const handleDismissRecordsRequest = () => {
+    if (!pendingRecordsRequest || !citizenId) {
+      setPendingRecordsRequest(null)
+      return
+    }
+
+    logAccessControlAuditEvent({
+      action: "records_link_request_dismissed",
+      status: "success",
+      actorRole: "citizen",
+      actorId: citizenId,
+      citizenId,
+      officerId: pendingRecordsRequest.officerId,
+      authority: pendingRecordsRequest.authority,
+      details: {
+        requestedAt: pendingRecordsRequest.requestedAt,
+        link: pendingRecordsRequest.link,
+      },
+    })
     setPendingRecordsRequest(null)
   }
 
@@ -360,7 +424,7 @@ export default function CitizenAuthorityChat() {
                         <Button size="sm" onClick={handleApproveRecordsRequest}>
                           Open and Share Records Link
                         </Button>
-                        <Button size="sm" variant="outline" onClick={() => setPendingRecordsRequest(null)}>
+                        <Button size="sm" variant="outline" onClick={handleDismissRecordsRequest}>
                           Dismiss
                         </Button>
                       </div>

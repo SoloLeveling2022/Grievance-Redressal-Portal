@@ -12,6 +12,7 @@ import {
 } from "lucide-react"
 import { OfficersLayout } from "@/components/doctor/officer-layout"
 import { getSocket } from "@/lib/socket"
+import { logAccessControlAuditEvent } from "@/utils/token-gated-records"
 import { useWebRtcCall } from "@/hooks/use-webrtc-call"
 import { WebRtcCallDialog } from "../../../components/common/webrtc-call-dialog"
 
@@ -153,6 +154,19 @@ export default function GrievanceChat() {
       if (payload.officerId !== id) return
       setLastRecordLink(payload.link)
       setRecordRequestStatus(`Approved by ${payload.citizenId}`)
+      logAccessControlAuditEvent({
+        action: "records_link_approval_received",
+        status: "success",
+        actorRole: "officer",
+        actorId: id,
+        officerId: id,
+        citizenId: payload.citizenId,
+        details: {
+          link: payload.link,
+          approvedAt: payload.approvedAt,
+        },
+        direction: "read",
+      })
       setMessages(prev => [
         ...prev,
         {
@@ -170,8 +184,34 @@ export default function GrievanceChat() {
     const onRecordsLinkRequestStatus = (payload: RecordsLinkRequestStatusPayload) => {
       if (payload.ok) {
         setRecordRequestStatus(`Request sent to ${payload.citizenId}`)
+        logAccessControlAuditEvent({
+          action: "records_link_request_status",
+          status: "success",
+          actorRole: "officer",
+          actorId: id,
+          officerId: id,
+          citizenId: payload.citizenId,
+          details: {
+            ok: payload.ok,
+            reason: payload.reason || null,
+          },
+          direction: "read",
+        })
       } else {
         setRecordRequestStatus(payload.reason || `Failed to send request to ${payload.citizenId}`)
+        logAccessControlAuditEvent({
+          action: "records_link_request_status",
+          status: "error",
+          actorRole: "officer",
+          actorId: id,
+          officerId: id,
+          citizenId: payload.citizenId,
+          details: {
+            ok: payload.ok,
+          },
+          error: payload.reason || `Failed to send request to ${payload.citizenId}`,
+          direction: "read",
+        })
       }
     }
 
@@ -181,6 +221,23 @@ export default function GrievanceChat() {
       const firstLink = payload.records.find((rec) => rec.links?.[0])?.links?.[0] || ""
       const finalAccessLink = payload.accessLink || `${window.location.origin}/officers/accessedRecords?shareToOfficer=${encodeURIComponent(payload.officerId)}`
       setAccessedRecordsLink(finalAccessLink)
+      logAccessControlAuditEvent({
+        action: "citizen_records_shared_received",
+        status: "success",
+        actorRole: "officer",
+        actorId: id,
+        officerId: id,
+        citizenId: payload.citizenId,
+        details: {
+          sharedAt: payload.sharedAt,
+          accessLink: finalAccessLink,
+          totalRecords: payload.records.length,
+          totalLinks,
+          recordIds: payload.records.map((record) => record.recordId),
+          records: payload.records,
+        },
+        direction: "read",
+      })
       setMessages(prev => [
         ...prev,
         {
@@ -281,6 +338,18 @@ export default function GrievanceChat() {
       link,
       requestedAt: new Date().toISOString(),
     })
+    logAccessControlAuditEvent({
+      action: "request_records_link_sent",
+      status: "success",
+      actorRole: "officer",
+      actorId: officerId,
+      officerId,
+      citizenId: selectedCitizen,
+      authority,
+      details: {
+        link,
+      },
+    })
     setLastRecordLink(link)
   }
 
@@ -289,10 +358,49 @@ export default function GrievanceChat() {
     try {
       await navigator.clipboard.writeText(accessedRecordsLink)
       setCopyStatus("Copied")
+      logAccessControlAuditEvent({
+        action: "accessed_records_link_copied",
+        status: "success",
+        actorRole: "officer",
+        actorId: officerId || "unknown-officer",
+        officerId: officerId || undefined,
+        citizenId: selectedCitizen || undefined,
+        details: {
+          accessedRecordsLink,
+        },
+      })
       setTimeout(() => setCopyStatus(""), 1500)
     } catch {
       setCopyStatus("Copy failed")
+      logAccessControlAuditEvent({
+        action: "accessed_records_link_copied",
+        status: "error",
+        actorRole: "officer",
+        actorId: officerId || "unknown-officer",
+        officerId: officerId || undefined,
+        citizenId: selectedCitizen || undefined,
+        details: {
+          accessedRecordsLink,
+        },
+        error: "Clipboard copy failed",
+      })
     }
+  }
+
+  const handleOpenAccessedRecords = () => {
+    if (!accessedRecordsLink) return
+    window.open(accessedRecordsLink, "_blank")
+    logAccessControlAuditEvent({
+      action: "accessed_records_opened",
+      status: "success",
+      actorRole: "officer",
+      actorId: officerId || "unknown-officer",
+      officerId: officerId || undefined,
+      citizenId: selectedCitizen || undefined,
+      details: {
+        accessedRecordsLink,
+      },
+    })
   }
 
   const handleStartAudioCall = () => {
@@ -375,7 +483,7 @@ export default function GrievanceChat() {
                     <p className="text-sm text-blue-700"><Shield className="h-4 w-4 inline mr-1" />Citizen identity is protected. Live synchronized messaging enabled.</p>
                     {accessedRecordsLink && (
                       <div className="mt-2 flex flex-wrap items-center gap-2">
-                        <Button size="sm" onClick={() => window.open(accessedRecordsLink, "_blank")}>
+                        <Button size="sm" onClick={handleOpenAccessedRecords}>
                           View Accessed Records
                         </Button>
                         <Button size="sm" variant="outline" onClick={handleCopyAccessLink}>

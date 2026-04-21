@@ -27,6 +27,8 @@ import jsPDF from "jspdf"
 import ReactMarkdown from "react-markdown"
 import { CheckCircle } from "lucide-react"
 import { getSocket } from "@/lib/socket"
+import { downloadBlockchainAuditLogsPdf, getBlockchainAuditLogs } from "@/utils/token-gated-records"
+import { logAccessControlAuditEvent } from "@/utils/token-gated-records"
 
 const PINATA_JWT = process.env.NEXT_PUBLIC_PINATA_JWT
 const PINATA_GATEWAY = process.env.NEXT_PUBLIC_PINATA_GATEWAY_URL || "https://gateway.pinata.cloud/ipfs/"
@@ -118,6 +120,11 @@ export default function citizenRecords() {
   const [modalRecord, setModalRecord] = useState<any | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isUploading, setIsUploading] = useState(false)
+  const [blockchainLogCount, setBlockchainLogCount] = useState(0)
+
+  const refreshBlockchainLogCount = () => {
+    setBlockchainLogCount(getBlockchainAuditLogs().length)
+  }
 
   useEffect(() => {
     async function fetchDiagnosisRecords() {
@@ -143,6 +150,18 @@ export default function citizenRecords() {
     }
     window.addEventListener("storage", onStorage)
     return () => window.removeEventListener("storage", onStorage)
+  }, [])
+
+  useEffect(() => {
+    refreshBlockchainLogCount()
+    const onStorageUpdate = () => refreshBlockchainLogCount()
+    const onAuditUpdate = () => refreshBlockchainLogCount()
+    window.addEventListener("storage", onStorageUpdate)
+    window.addEventListener("careconnect:blockchain-audit-updated", onAuditUpdate)
+    return () => {
+      window.removeEventListener("storage", onStorageUpdate)
+      window.removeEventListener("careconnect:blockchain-audit-updated", onAuditUpdate)
+    }
   }, [])
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -406,6 +425,20 @@ export default function citizenRecords() {
       records: selectedPayload,
     })
     const totalLinks = selectedPayload.reduce((acc, rec) => acc + rec.links.length, 0)
+    logAccessControlAuditEvent({
+      action: "citizen_selected_records_shared",
+      status: "success",
+      actorRole: "citizen",
+      actorId: shareCitizenId || "unknown-citizen",
+      citizenId: shareCitizenId || undefined,
+      officerId: shareToOfficer || undefined,
+      details: {
+        totalRecords: selectedPayload.length,
+        totalLinks,
+        recordIds: selectedPayload.map((record) => record.recordId),
+        records: selectedPayload,
+      },
+    })
     setShareStatus(
       `Shared ${selectedPayload.length} record(s) with officer ${shareToOfficer} (${totalLinks} file link(s) attached).`,
     )
@@ -516,6 +549,19 @@ export default function citizenRecords() {
     doc.setTextColor(0, 0, 0)
     doc.save("CareConnect_Diagnosis_Report.pdf")
     console.log(record.files[0].url)
+  }
+
+  function exportBlockchainLogsPdf() {
+    const logs = getBlockchainAuditLogs()
+    if (!logs.length) {
+      window.alert("No blockchain logs found yet. Trigger blockchain record actions first, then export.")
+      return
+    }
+
+    downloadBlockchainAuditLogsPdf({
+      logs,
+      fileName: `CareConnect_Blockchain_Audit_${new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-")}.pdf`,
+    })
   }
 
   // Modal content for viewing a record
@@ -794,6 +840,10 @@ export default function citizenRecords() {
                   </form>
                 </DialogContent>
               </Dialog>
+              <Button variant="outline" onClick={exportBlockchainLogsPdf}>
+                <Download className="h-4 w-4 mr-2" />
+                  Export Logs PDF
+              </Button>
             </div>
           </CardContent>
         </Card>

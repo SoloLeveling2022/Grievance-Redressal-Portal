@@ -90,18 +90,18 @@ useEffect(() => {
     { name: t("dashboard"), href: "/citizen/dashboard", icon: Home },
     { name: t("goals"), href: "/citizen/face-blur", icon:ScanFaceIcon},
     { name: t("symptomScreening"), href: "/citizen/symptoms", icon: Plus },
+    { name: t("scanAnalysis"), href: "/citizen/notice-interpreter", icon: Scan },
+    { name: t("chat"), href: "/citizen/chat", icon: MessageSquare },
+    { name: t("medicalRecords"), href: "/citizen/records", icon: FileText },
+    { name: t("nearbyHospitals"), href: "/citizen/hospitals", icon: MapPin },
     { name: t("medReminder"), href: "/citizen/med-reminder", icon: AlarmClock },
     { name: t("postOpFollowup"), href: "/citizen/postop-followup", icon: Activity },
-    { name: t("scanAnalysis"), href: "/citizen/notice-interpreter", icon: Scan },
     // { name: t("recipes"), href: "/citizen/recipes", icon: SoupIcon },
     // { name: t("healthFitnessPlan"), href: "/citizen/health-plan", icon: Dumbbell },
     // { name: t("workout"), href: "/citizen/workout", icon: BicepsFlexed },
     // { name: t("appointments"), href: "/citizen/appointments", icon: Calendar },
-    { name: t("nearbyHospitals"), href: "/citizen/hospitals", icon: MapPin },
     // { name: t("aiPrescriptions"), href: "/citizen/ai-prescriptions", icon: Bot },
     // { name: t("prescriptions"), href: "/citizen/prescriptions", icon: Pill },
-    { name: t("medicalRecords"), href: "/citizen/records", icon: FileText },
-    { name: t("chat"), href: "/citizen/chat", icon: MessageSquare },
     
   ]
 
